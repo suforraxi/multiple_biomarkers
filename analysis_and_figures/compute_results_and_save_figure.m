@@ -40,13 +40,9 @@ for d = 1 : numel(inFolder)
 
     cfg.fName2save = fullfile(rootSummaryFolder,strcat('summary_tbl_',inFolder(d).name,'.mat'));
     
-    %create_summmary_table_main(cfg)
+    create_summmary_table_main(cfg)
 
 end
-
-
-
-
 
 
 sf_class   = cfg.sf_class;
@@ -279,7 +275,6 @@ for te = typeE
     
 end
 close all
-
 
 figure;
 typeE_label = {'Joint (T+E)','Temporal','Extra-Temporal'};
