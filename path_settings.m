@@ -20,6 +20,7 @@ addpath(fullfile(root_repository,'biomarker_result_tables/'))
 addpath(fullfile(root_repository,'analysis_and_figures/'))
 addpath(fullfile(root_repository,'batch/'))
 addpath(fullfile(root_repository,'read_bids/'))
+addpath(fullfile(root_repository,'external/'))
        
 addpath(fullfile(git_root,'jsonlab')) 
 
