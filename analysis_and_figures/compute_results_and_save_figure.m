@@ -40,7 +40,7 @@ for d = 1 : numel(inFolder)
 
     cfg.fName2save = fullfile(rootSummaryFolder,strcat('summary_tbl_',inFolder(d).name,'.mat'));
     
-    create_summmary_table_main(cfg)
+    %create_summmary_table_main(cfg)
 
 end
 
@@ -69,10 +69,7 @@ typeEPI = cfg.typeEPI;
  % Difference between distributions (pooling together all the available channels of different subjects) of 
 % pre-resection resected biomaker values in improved patients
 
-outfile = cfg.poolingChannelRes;
-show_channel_results(outfile); 
-
-
+pooling_channels(cfg)
 
 % compute maximum table per type of epilepsy / seizure outcome group
 % Each element of the cell out contains a struct with three dimensional cell biomaker X pathology group X seizure outcome group
@@ -111,7 +108,7 @@ out = [];
  end
 
  
-% Difference between distributions (maxim value of the biomarker per subjects) of 
+% Difference between distributions (maximum value of the biomarker per subjects) of 
 % pre-resection resected biomaker values in improved patients
 % and post-resection biomarker values in cured patients 
  
@@ -301,99 +298,89 @@ saveas(f,fullfile(outFolder,'noHitAnyHit_j_t_e'),'png')
 close all
 
 
+
+
 % compare distributions pre-resection in improved patients vs post-resection cured pooling channels  
-function show_channel_results(outfile)
-%% Organized results
-% differential analysis (all subjects / temporal / extra-temporal) 
+function pooling_channels(cfg)
+figure
 
-close all
+sf_class   = cfg.sf_class{1};
+seizOut    = cfg.seizOut_poolingCH{1};
+path_group = cfg.path_group{1};
+typeEPI    = cfg.typeEPI{1};
 
-tbl2load = {'/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_ARR.mat', ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PAC.mat', ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PLV.mat', ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PLI.mat', ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_H2.mat',  ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_GC.mat',  ...
-            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_sdDTF.mat'...
-            };
+for i = 1 :numel(cfg.tbl2load)
    
-        
-cfg.bioName ={'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-
-
-
-cfg.sf_var          = 'description_sf_1y';
-cfg.sf_regexp       = '1(a|b)\w*';
-
-
-
-cfg.subj2rem        = {                                                       ...                                            
-                      'RESP0448','RESP0480','RESP0482','RESP0484','RESP0497', ... % hfo trial
-                      'RESP0500','RESP0519','RESP0537','RESP0542','RESP0556', ... % hfo trial
-                      'RESP0566','RESP0572','RESP0604','RESP0631','RESP0636', ... % hfo trial
-                      'RESP0640','RESP0644', ...                                  % hfo trial 
-                      'RESP0353','RESP0623'  ...                                  % no last post recording
-                      };
-
-cfg.typeEPI         = '\w*';%{'\w*','T','E'}; 
-
-cfg.pathology_group = 0; 
-
-
-    
-
-cfg.nStep          = 100;
-cfg.nStepQ         = 1000;
-cfg.normalize      = 1;
-cfg.showpoints     = 0;
-
-cfg.prc_healthy    = 95;
-cfg.linePercentile = 0;
-
-
-cfg.spline         = 0; 
-
-
-
-
-for i = 1 :numel(tbl2load)
-   
-    load(tbl2load{i});
+    load(cfg.tbl2load{i});
     
     
     % select artefact free
     subj_tbl = select_artfree(subj_tbl);
 
 
-    subj_tbl = select_seizoutcome(subj_tbl,cfg.sf_var,cfg.sf_regexp);
+    subj_tbl = select_seizoutcome(subj_tbl,sf_class,seizOut);
 
     % remove subject by name
     subj_tbl = rem_subj_from_tbl(cfg.subj2rem,subj_tbl);
 
     
     % select pathology group
-    subj_tbl = select_primary_pathology_group(subj_tbl,cfg.pathology_group);
+    subj_tbl = select_primary_pathology_group(subj_tbl,path_group);
     
     %filter for epilepsy type
 
-    subj_tbl = select_typeEPI(subj_tbl,cfg.typeEPI);
+    subj_tbl = select_typeEPI(subj_tbl,typeEPI);
 
     
-    cfg.tblLoaded{i} = subj_tbl;
     
+    [vals,group_labels,~] = getValXclass_pre_post_R_NR(subj_tbl);
+
+
+    preR_idx = strcmp(group_labels,'preR');
+    post_idx = strcmp(group_labels,'postNR');
+   
+    [h,p]          = kstest2(vals(post_idx),vals(preR_idx),'Tail','larger');
+    pre_post_vals  = [vals(preR_idx); vals(post_idx)];
+
+    pre_post_label = [repmat({'PRE Resected'},1,sum(preR_idx)) repmat({'POST'},1,sum(post_idx))];
     
+    subplot(2,4,i)
     
+    viol = violinplot(pre_post_vals, pre_post_label);
+    viol(1).ViolinColor = [0 0 1];
+    viol(2).ViolinColor = [1 0 0];
+
+
+    title(cfg.bioNames{i},'FontSize',13)
+
+    switch cfg.bioNames{i}
+      case {'ARR','PAC'}
+          ylabel(sprintf('%s per channel',cfg.bioNames{i}))
+      otherwise
+          ylabel(sprintf('strength per channel',cfg.bioNames{i}))
+    end
+
+    xMarker = 1.5;
+    MSize   = 14;
+    ymax    = max(pre_post_vals);
+
+    
+    if(p <= cfg.alpha_level) % plot asteriks if significant
+        plot(xMarker,ymax,'*','MarkerSize',MSize)
+    end  
+
 
 end
 
-cfg.alpha_level = 0.05;
 
-channel_density(cfg)
 f = gcf;
 f.PaperOrientation = 'landscape';
 set(f, 'Position', get(0, 'Screensize'));
-print(outfile,'-dpng')
+print(cfg.poolingChannelFile ,'-dpng')
 close all
+
+
+
 
 
 
@@ -446,7 +433,7 @@ for te = 1 : size(out,1)
               ylabel(sprintf('max strength per subject',c_bioName))
        end
        
-       if(p(te,i) <= alpha_level) % plot asteriks if significant
+       if(round(p(te,i),2) <= alpha_level) % plot asteriks if significant
             plot(xMarker,ymax,'*','MarkerSize',MSize)
        end
     end   

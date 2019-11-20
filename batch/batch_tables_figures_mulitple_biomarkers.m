@@ -19,9 +19,10 @@ cfg.bidsFolder       = '/home/matteo/Desktop/tle_e/converted/';
 cfg.rootInResFolder   = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 % Folder where to save the summary tables
 cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables'); 
-% Filename for the output picture of the group level analysis pooling all
-% channels
-cfg.poolingChannelRes = fullfile(root_outFolder ,'figures','group_level_pooling channels'); 
+ 
+% out filename for the comparison of distributions pre and post pooling all
+% channel together
+cfg.poolingChannelFile = fullfile(root_outFolder ,'figures','pooling_channels') ;
 
 % Folder for the results of the comparison between distribution of the
 % maximum value per subject
@@ -42,6 +43,7 @@ cfg.subj2rem       = {                                                        ..
                       'RESP0566','RESP0572','RESP0604','RESP0631','RESP0636', ... % hfo trial
                       'RESP0640','RESP0644', ...                                  % hfo trial 
                       'RESP0353','RESP0623'  ...                                  % no last post recording
+                      'RESP0218','RESP0301'  ...                                  % frequency sample not 2048
                      };
 
 % regular expression defining the epilepsy type (all/ T = temporal, E = extra-temporal ) 
@@ -69,8 +71,12 @@ cfg.path_idx_of_interest       = 1;
 cfg.seizOut2try                = {'1a_AED_stop\w*','1(a|b)\w*'};
 cfg.seizOut_idx                = [1 2];
 
+cfg.seizOut_poolingCH          = {'1(a|b)\w*'};
 % remove channels labeled with N-N (not present)
 cfg.removeNNchannels           = 1;
+
+
+
 
 % function to plot and save the figures
 compute_results_and_save_figure(cfg)
