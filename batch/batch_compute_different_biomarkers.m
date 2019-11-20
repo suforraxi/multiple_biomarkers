@@ -2,7 +2,7 @@
 %
 % Batch to compute different biomarkers
 
-% input cfg structure
+% input 
 %
 % inDir_data     -   input folder for where the raw data in BIDS is located
 % 
