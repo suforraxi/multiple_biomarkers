@@ -25,7 +25,7 @@ cfg.poolingChannelRes = fullfile(root_outFolder ,'figures','group_level_pooling 
 
 % Folder for the results of the comparison between distribution of the
 % maximum value per subject
-cfg.outFolderMaxComparison   = fullfile(root_outFolder ,'figures') ;
+cfg.outFolderMaxComparison   = strcat(fullfile(root_outFolder ,'figures'),filesep) ;
 
 % regular expression to define the group of patients used to compute the global
 % threshold (cured patients)

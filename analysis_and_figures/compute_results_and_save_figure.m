@@ -44,15 +44,11 @@ for d = 1 : numel(inFolder)
 
 end
 
-% Difference between distributions (pooling together all the available channels of different subjects) of 
-% pre-resection resected biomaker values in improved patients
 
 
 
 
-% Difference between distributions (maxim value of the biomarker per subjects) of 
-% pre-resection resected biomaker values in improved patients
-% and post-resection biomarker values in cured patients 
+
 sf_class   = cfg.sf_class;
 
 path_group = cfg.path_group;
@@ -70,7 +66,8 @@ cfg.bioNames       = cfg.bioNames;
 
 typeEPI = cfg.typeEPI;  
   
- 
+ % Difference between distributions (pooling together all the available channels of different subjects) of 
+% pre-resection resected biomaker values in improved patients
 
 outfile = cfg.poolingChannelRes;
 show_channel_results(outfile); 
@@ -113,6 +110,12 @@ out = [];
     
  end
 
+ 
+% Difference between distributions (maxim value of the biomarker per subjects) of 
+% pre-resection resected biomaker values in improved patients
+% and post-resection biomarker values in cured patients 
+ 
+ 
 cfg.path_idx    = cfg.path_idx_of_interest;
 cfg.bioNames    = cfg.bioNames; 
 cfg.idx2plot    = cfg.bioMarker2plotMaxDistribution; 
@@ -246,7 +249,7 @@ for te = typeE
     xlabel('subjects')
     title(goi{te},'FontSize',14)
 
-    cumBioHit = zeros(1,numBio);outFolder
+    cumBioHit = zeros(1,numBio);
 
 
     for i = 1 : numBio
@@ -305,13 +308,13 @@ function show_channel_results(outfile)
 
 close all
 
-tbl2load = {'/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_ARR.mat', ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_PAC.mat', ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_PLV.mat', ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_PLI.mat', ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_H2.mat',  ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_GC.mat',  ...
-            '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/summary_tbl_sdDTF.mat'...
+tbl2load = {'/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_ARR.mat', ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PAC.mat', ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PLV.mat', ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_PLI.mat', ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_H2.mat',  ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_GC.mat',  ...
+            '/home/matteo/Desktop/analysis_multiple_biomarkers/summary_tables/summary_tbl_sdDTF.mat'...
             };
    
         

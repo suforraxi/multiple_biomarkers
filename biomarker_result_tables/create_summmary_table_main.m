@@ -210,8 +210,10 @@ nCh                         = numel(outres.label);
 [idxArtefact,idx_art_trial] = find_marked_artefacts(outres,artefact_T);
 
 switch(outres.type)
-    case {'ARR','PAC','PLV','PLI','H2','sdDTF'} 
+    case {'ARR','PAC'}
         biores      = nanmean(abs(cell2mat(outres.bio)),2);
+    case {'PLV','PLI','H2','sdDTF'} 
+        biores      = nanmean(abs(cell2mat(outres.bio(~idx_art_trial))),2);
     case {'GC'}
         biores      = cell2mat(outres.bio);
 end
