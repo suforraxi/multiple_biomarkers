@@ -4,7 +4,8 @@
 function batch_compute_different_biomarkers(bioName)
 
 % setting up the path
-
+addpath('/home/matteo/Desktop/git_rep/multiple_biomarkers/')
+path_settings;
 
 if(strcmp(bioName,'sdDTF'))
     eeglab;
@@ -12,10 +13,14 @@ end
 
 %% all temporal and extra temporal
 
-cfgBatch.inDir_data       = '/home/matteo/Desktop/tle_e/converted/'; 
-cfgBatch.subj_info_F      = '/home/matteo/Desktop/tle_e/info/info.tsv';
-outrootFolder             = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/';
+%cfgBatch.inDir_data       = '/home/matteo/Desktop/tle_e/converted/'; 
+%cfgBatch.subj_info_F      = '/home/matteo/Desktop/tle_e/info/info.tsv';
+%outrootFolder             = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/';
 
+
+cfgBatch.inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
+cfgBatch.subj_info_F      = '/home/matteo/Desktop/analysis_multiple_biomarkers/info/info.tsv';
+outrootFolder             = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
 
 % parameters to select
 cfgBatch.cutLast          = 1;
