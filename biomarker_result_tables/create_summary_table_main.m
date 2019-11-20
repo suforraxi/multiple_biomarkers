@@ -57,7 +57,7 @@
 % have the same sitName/ subjName / paht_desc 
 
 
-function create_summmary_table_main(cfg)
+function create_summary_table_main(cfg)
 
 subj_tbl = create_table(cfg);
 chName   = subj_tbl.chName;

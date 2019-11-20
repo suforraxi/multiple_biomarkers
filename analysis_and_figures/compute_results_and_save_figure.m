@@ -40,7 +40,7 @@ for d = 1 : numel(inFolder)
 
     cfg.fName2save = fullfile(rootSummaryFolder,strcat('summary_tbl_',inFolder(d).name,'.mat'));
     
-    create_summmary_table_main(cfg)
+    create_summary_table_main(cfg)
 
 end
 
