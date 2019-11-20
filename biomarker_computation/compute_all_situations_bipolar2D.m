@@ -1,13 +1,13 @@
 
 % Compute a biomarker for every subjects in BIDS folder
 % Possible biomarkers:
-% AutoRegressive model Residual (ARR) (Geertsma 2015)
-% Phase Amplitude Coupling (PAC)
-% Phase Lag Index (PLI) (Stam 2007)
-% Phase Locking Value (PLV) (Mormann 2000)
-% H2 non linear correlation coefficient (Kalitzin 2006)
-% time-based Granger Causality (GC) (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
-% Short-time direct Directed Transfer Function (sdDTF)(Mullen 2014 SIFT toolbox)
+%   AutoRegressive model Residual (ARR) (Geertsma 2015)
+%   Phase Amplitude Coupling (PAC)
+%   Phase Lag Index (PLI) (Stam 2007)
+%   Phase Locking Value (PLV) (Mormann 2000)
+%   H2 non linear correlation coefficient (Kalitzin 2006)
+%   time-based Granger Causality (GC) (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
+%   Short-time direct Directed Transfer Function (sdDTF)(Mullen 2014 SIFT toolbox)
 
 % cfgBatch.inDir_data    BIDS folder with the data       
 % cfgBatch.subj_info_F   table with information about the subjects (available/pathology/seizure outcome etc etc)   
@@ -28,7 +28,7 @@ outdir_combi = cfgBatch.outdir_combi ;
 errorFile    = cfgBatch.errorFile    ;
 
 
-%% obtain data (root directory of BIDS project)
+% obtain data (root directory of BIDS project)
 
 subjList       = dir(fullfile(inDir_data,'sub*'));
 subjNames_DB   = cell(numel(subjList),1);
@@ -37,7 +37,7 @@ for s = 1 : numel(subjList)
     subjNames_DB{s} = char(subjName{1});
 end
 
-%% selection of  subjects 
+% selection of  subjects 
 
 tbl_info_T      = readtable(subj_info_F, 'Delimiter', 'tab', 'FileType', 'text', 'ReadVariableNames', true);
 tbl_info_T.Row  = tbl_info_T.subjID; 

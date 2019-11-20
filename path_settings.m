@@ -1,5 +1,7 @@
-%% Setting path for all the dependencies
-%
+% 
+% Setting path for all the dependencies for manuscript DOI:
+% All the matlab functions and toolboxes required
+% They are freely available on the web
 
 git_root        = '/home/matteo/Desktop/git_rep/';
 root_repository = fullfile(git_root,'multiple_biomarkers');
@@ -25,13 +27,12 @@ addpath(fullfile(root_repository,'read_bids/'))
 addpath(fullfile(root_repository,'external/'))
    
 
-
 % MVGC toolbox  (https://users.sussex.ac.uk/~lionelb/MVGC/)      
 run('/home/matteo/Desktop/mat_lib/mvgc_v1.0/startup.m');
 
         
 
-%% eeglab (https://sccn.ucsd.edu/eeglab/index.php)
+% eeglab (https://sccn.ucsd.edu/eeglab/index.php)
 eeglab_root     = '/home/matteo/Desktop/mat_lib/eeglab2019_0/';
 
 addpath(sprintf('%s%splugins%sfirfilt2.3',eeglab_root,filesep,filesep))
@@ -46,7 +47,6 @@ addpath(sprintf('%s',eeglab_root))
 
 
 % fieldtrip (https://github.com/fieldtrip)
-
 addpath((fullfile(git_root,'fieldtrip')));
 
 % Violin plots (https://github.com/bastibe/Violinplot-Matlab)

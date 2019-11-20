@@ -23,7 +23,7 @@ function compute_results_and_save_figure(cfg)
 
 
 
-%% create tables from biomarkers struct (outres) 
+% create tables from biomarkers struct (outres) 
 
 % Result folder
 rootInResFolder   = cfg.rootInResFolder;

@@ -27,7 +27,7 @@ if(cfg.notch)
 
     cfgNotch.bsfilter = 'yes';
     cfgNotch.bsfreq   = cfg.notchBS;
-    cfgNotch.trial  = 'all';
+    cfgNotch.trial    = 'all';
     
     data = ft_preprocessing(cfgNotch,data);
 end
