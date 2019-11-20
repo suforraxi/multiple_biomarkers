@@ -4,7 +4,7 @@ function [ bio_vals, extra ] = wrapper_GCtime(cfg,data)
 extra    = [];
 bio_vals = [];
 
-%band_of_interest  = cfg.boi;
+
 
 [~,fName,~]                  = fileparts(cfg.datasetName);
 [ res_channel, artefact_T]   = get_metadata(cfg.inDir_data,fName);
@@ -17,31 +17,29 @@ data               = ft_redefinetrial(cfgRedefine,data);
 
 ntrial = size(data.trial,2);
 
+try
+    res         = compute_GCtime(cfg,data);
 
-%for i = 1: ntrial
-    try
-        res         = compute_GCtime(cfg,data);
+    aux.m      = res.m;
+    aux.pval   = res.pval;
+    aux.sig    = res.sig;
+    aux.morder = res.morder;
 
-        aux.m      = res.m;
-        aux.pval   = res.pval;
-        aux.sig    = res.sig;
-        aux.morder = res.morder;
+    extra{1}    = res;
 
-        extra{1}    = res;
+    bio_vals{1} = (nansum(aux.m,1) / (size(aux.m,1)-1))'; % out strength
+catch ME
+    aux.m      = [];
+    aux.pval   = [];
+    aux.sig    = [];
+    aux.morder = [];
 
-        bio_vals{1} = (nansum(aux.m,1) / (size(aux.m,1)-1))'; % out strength
-    catch ME
-        aux.m      = [];
-        aux.pval   = [];
-        aux.sig    = [];
-        aux.morder = [];
+    extra{1}    = [];
 
-        extra{1}    = [];
+    bio_vals{1} = []; 
 
-        bio_vals{1} = []; 
-        
-    end
-%end
+end
+
 
 
 

@@ -1,10 +1,8 @@
 %% 
 %  Figures for manuscript DOI: 
 
-addpath('/home/matteo/Desktop/git_rep/epi/matlab/episign/multiple_biomarkers_analysis/')
-addpath('/home/matteo/Desktop/git_rep/epi/matlab/episign/biomarker_pipeline/')
-addpath(fullfile('/home/matteo/Desktop/git_rep/','jsonlab'))
-addpath('/home/matteo/Desktop/git_rep/Violinplot-Matlab/')
+
+root_outFolder = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
 
 cfg = [];
 
@@ -20,14 +18,14 @@ cfg.bidsFolder       = '/home/matteo/Desktop/tle_e/converted/';
 % Result folder where the computed biomarkers are saved 
 cfg.rootInResFolder   = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 % Folder where to save the summary tables
-cfg.rootSummaryFolder = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/summary_table_new/'; 
+cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables'); 
 % Filename for the output picture of the group level analysis pooling all
 % channels
-cfg.poolingChannelRes = '/home/matteo/Desktop/pics_4_result_section/actual_figures_tryingonefile/group_level_pooling channels'; 
+cfg.poolingChannelRes = fullfile(root_outFolder ,'figures','group_level_pooling channels'); 
 
 % Folder for the results of the comparison between distribution of the
 % maximum value per subject
-cfg.outFolderMaxComparison   = '/home/matteo/Desktop/pics_4_result_section/actual_figures_tryingonefile/';
+cfg.outFolderMaxComparison   = fullfile(root_outFolder ,'figures') ;
 
 % regular expression to define the group of patients used to compute the global
 % threshold (cured patients)
