@@ -1,4 +1,26 @@
-% wrapper PLV
+% wrapper PLV (Mormann 2000)
+
+% INPUT
+% cfg - struct with the following field        
+%        cfg.boi : [x y] frequency band boundaries to filter the signals before to compute PLV
+%
+% data - fieldtrip data structure
+%         data.trial
+%         data.time
+%         data.fsample
+%         data.label
+%         data.sampleinfo
+%
+%
+%
+% OUTPUT
+% bio_vals cell array with the PLV strength (average over functional connectivity rows extra.m) 
+%          computed for every channel and every trial
+%
+% extra    struct with the following fields
+%           extra.m    functional connectivity matrix of PLV values   
+%           extra.boi  frequency band boundaries used to filter the signals before to compute PLV  
+% 
 function [ bio_vals, extra ] = wrapper_PLV(cfg,data)
 
 extra    = [];

@@ -1,4 +1,4 @@
-%create bipolar montage for strip and bids
+%create bipolar montage for strip 
 
 % ch_label - channel names 
 % data     - (ch X samples) data matrix 
@@ -14,8 +14,9 @@ addhyphen = @(x) [x '-'];
 strip2use = {};
 outdata   = [];
 
-% look for strip names
+% look for strip names, possible strip prefix are
 strip_names  = {'Str','Rst','Riv','St','StrB','Sst','S1-'};
+
 
 lookup4strip = regexpi(ch_label,'(Str|Rst|Riv|St|StrB|Sst|S1-)\d+');
 strip_idx    = ~cell2mat(cellfun(@isempty,lookup4strip,'UniformOutput',false));
@@ -76,12 +77,12 @@ if(any(strip_idx))
 
                 if(sum(chAvailable) == numel(c_mont)) %all required channels are present
 
-                    %curr_ch_idx                        = strcmp( strip_label , ch2check{1}); 
+                   
                     chAvailable(curr_ch_idx) = 0;
                     montage_M(i,chAvailable) = -1;
                     montage_M(i,curr_ch_idx) = 1; 
 
-                    %label2add = cellfun(addhyphen,strip_label,'UniformOutput',false);
+                
                     strip2use{i,1} = strcat(ch2check{1},'-',ch2check{end});
                 else
                     montage_M(i,:) = 0;

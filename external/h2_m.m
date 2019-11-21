@@ -24,7 +24,7 @@
 %                      N=[N1<1 N2>1] is the N1 prctile for N2 itterations
 %                      
 % VERSION:
-%  Stiliyan, 13.08.18
+%  Stiliyan Kalitzin 13.08.18
 
 function [C,n,p]=h2_m(S1,S2,n,N)
 S1=reshape(S1,[1 numel(S1)]); 

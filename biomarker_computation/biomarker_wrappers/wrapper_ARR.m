@@ -1,4 +1,26 @@
-% wrapper for ARR
+% wrapper for ARR (Geertsema 2017)
+%
+% INPUT
+% cfg - struct with the following field
+%        cfg.windowL : window length to compute compute the residual expressed in number of sample 
+% 
+% data - fieldtrip data structure
+%         data.trial
+%         data.time
+%         data.fsample
+%         data.label
+%         data.sampleinfo
+%
+%
+%
+% OUTPUT
+% bio_vals cell array with the ARRm computed for every channel and every
+%          trial
+% extra    struct with the following fields
+%           r1      - residual of the ARR model with order 1 (channel X #windows)
+%           r2      - residual of the ARR model with order 2 (channel X #windows)
+%           r3      - residual of the ARR model with order 3 (channel X #windows)
+%           r_clean - r3 but without possible artefacts (channel X # clean windows)
 function [ bio_vals, extra ] = wrapper_ARR(cfg,data)
 
 bio_vals = [];
@@ -41,17 +63,18 @@ for i = 1: ntrial
 end
 
 %function to compute the ARRm values
-%data - the recordings (channel X sample)
-%windowL - number of sample in the windows 
-% r1 - residual of the ARR model with order 1 (channel X #windows)
-% r2 - residual of the ARR model with order 2 (channel X #windows)
-% r3 - residual of the ARR model with order 3 (channel X #windows)
+% data    - the recordings (channel X sample)
+% windowL - window length to compute compute the residual expressed in number of sample 
+%
+% r1      - residual of the ARR model with order 1 (channel X #windows)
+% r2      - residual of the ARR model with order 2 (channel X #windows)
+% r3      - residual of the ARR model with order 3 (channel X #windows)
 % r_clean - r3 but without possible artefacts (channel X # clean windows)
 
 function [r1,r2,r3,r_clean,ARR,ARRm]=compute_ARRm(data,windowL)
 
 
-
+% see /external/get_residual.m
 [~,r1,~] = get_residual(data,1,windowL);
 [~,r2,~] = get_residual(data,2,windowL);
 

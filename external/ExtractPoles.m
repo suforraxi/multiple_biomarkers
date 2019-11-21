@@ -10,7 +10,7 @@
 %    r - residual variation (noise)
 %    A - complex amplitudes 
 % VERSION:
-%   Stiliyan 20.02.2013
+%   Stiliyan Kalitzin 20.02.2013
 
 function [Z,r,A] = ExtractPoles(S,n)
 if nargin<2

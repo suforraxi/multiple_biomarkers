@@ -1,6 +1,7 @@
 % Calculate poles (Z), amplitudes (A), and residuals (r)
 % with model order (n) and windowlength (L) with 50% overlap
 
+% Stiliyan Kalitzin
 function [Z,r,A] = get_residual(D,n,L)
 
 for c=1:size(D,1)

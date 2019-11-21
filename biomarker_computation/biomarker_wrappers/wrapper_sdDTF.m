@@ -1,5 +1,33 @@
-%% compute sdDTF with SIFT toolbox 
-%  following Zweiphenning 2019 pipeline
+%% compute sdDTF (see Mullen 2014 SIFT toolbox and  Zweiphenning 2019)
+% wrapper GC time domain (see Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox and Park 2018)
+% INPUT
+% cfg - struct with the following field        
+%           cfg.morder            :  model order to use for the estimation
+%                                    of the multivariate model
+%           cfg.freqBand          :  array specifying frequencies of interest
+%           cfg.WindowLengthSec   :  window size for trial
+%           cfg.WindowStepSizeSec :  step between windows
+%
+% data - fieldtrip data structure
+%         data.trial
+%         data.time
+%         data.fsample
+%         data.label
+%         data.sampleinfo
+%
+%
+%
+% OUTPUT
+% bio_vals cell array with the out-strength computed on sdDTF matrix 
+%          (average over functional connectivity rows extra.m) computed for every channel and every trial
+%
+% extra    struct with the following fields
+%               extra.m      directed connectivity matrix 
+%               extra.morder model order used to estimate the model
+%               extra.freq   frequency where the model was estimated
+%               extra.IC     model fitting information (see SIFT toolbox) 
+%               extra.CONN   connectivity information  (see SIFT toolbox)
+% 
 
 function [ bio_vals, extra ] = wrapper_sdDTF(cfg,data)
 

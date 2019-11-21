@@ -12,7 +12,7 @@
 % USES:
 %   h2_c.m
 % VERSION:
-%  Stiliyan, 24.08.01
+%  Stiliyan Kalitzin 24.08.01
 
 function C = h2delay(S1, S2, T, n, method)
 

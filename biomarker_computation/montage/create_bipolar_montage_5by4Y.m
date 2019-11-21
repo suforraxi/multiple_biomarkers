@@ -1,11 +1,11 @@
-%create bipolar montage for grid 5x4 and bids
+%create bipolar montage for grid 5x4 on the transversal direction 
 
 % ch_label - channel names 
 % data     - (ch X samples) data matrix 
 
 % grid2use - grid labels available for which it was possible to compute the
 %            bipolar montage
-% outdata  - bipolar trasformation for the grid (i.e Gr1-Gr2)
+% outdata  - bipolar trasformation for the grid (i.e Gr1-Gr6)
 function [grid2use,outdata]=create_bipolar_montage_5by4Y(ch_label,data)
 
 % extract grid channels
@@ -26,7 +26,7 @@ if(any(grid_idx))
     grid_label   = grid_label(reindex);
     data         = data(reindex,:);
 
-    %check for which channel is possible to compute the laplacian
+  
 
 
     montage = [  1 6   ;...
@@ -107,10 +107,4 @@ else
     grid2use = []; 
     outdata  = [];
 end
-% figure;imagesc(montage2use)
-% xticks(1:size(montage2use,2))
-% yticks(1:size(montage2use,1))
-% xticklabels(grid_label)
-% xtickangle(45)
-% yticklabels(grid2use)
-% ytickangle(45)
+

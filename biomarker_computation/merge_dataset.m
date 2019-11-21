@@ -1,6 +1,9 @@
-%% merge the data fields of data1 and data2 in merge_data
-% data1 and data2 - fieldtrip struct
+% merge the data fields of data1 and data2 in merge_data
+% used to merge grid and strip data
+
+% data1 and data2 - fieldtrip data struct to merge
 % merged_data     - fieldtrip struct containing the merged fields
+%
 % Note it removes channels not present indicated by N-N in the name for
 % bipolar montage
 function merged_data = merge_dataset(data1,data2)

@@ -1,4 +1,29 @@
-% wrapper GC time domain (similar to Park 2018)
+% wrapper GC time domain (see Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox and Park 2018)
+% INPUT
+% cfg - struct with the following field        
+%        cfg.momax : maximal model order to try
+%        
+%
+% data - fieldtrip data structure
+%         data.trial
+%         data.time
+%         data.fsample
+%         data.label
+%         data.sampleinfo
+%
+%
+%
+% OUTPUT
+% bio_vals cell array with the out-strength computed on Granger Causality connectivity matrix 
+%          (average over functional connectivity rows extra.m) computed for every channel and every trial
+%
+% extra    struct with the following fields
+%           extra.m      functional connectivity matrix of GC values (Granger Causality connectivity directed matrix)  
+%           extra.pval   matrix of p-values for each connectivity value
+%           extra.sig    mask of significant connectivity values 1 of significant 0 otherwise  
+%           extra.morder model order used
+% 
+
 function [ bio_vals, extra ] = wrapper_GCtime(cfg,data)
 
 extra    = [];
@@ -11,7 +36,7 @@ bio_vals = [];
 [idxArtefact ,idx_art_trial] = find_artefacts_epochs(data.sampleinfo,data.label,artefact_T);
 
 [~,outdata.hdr.datasetName,~] = fileparts(cfg.datasetName); 
-
+% remove trials with artefacts
 cfgRedefine.trials = ~idx_art_trial;
 data               = ft_redefinetrial(cfgRedefine,data);
 
@@ -38,7 +63,7 @@ catch ME
 
     bio_vals{1} = []; 
 
-end
+endsignificance
 
 
 

@@ -1,4 +1,29 @@
-% wrapper PAC 
+% wrapper PAC
+% INPUT
+% cfg - struct with the following field
+%           cfg.lb: low frequency band boundaries [x y] to use estimate the phase   
+%           cfg.hb: high frequency band boundaries [x y] to use estimate the
+%                   amplitude envelope
+%
+% data - fieldtrip data structure
+%         data.trial
+%         data.time
+%         data.fsample
+%         data.label
+%         data.sampleinfo
+%
+%
+%
+% OUTPUT
+% bio_vals cell array with the PAC computed for every channel and every trial
+%
+% extra    struct with the following fields
+%          extra.pac complex value of phase amplitude coupling
+%          extra.lf  low frequency band boundaries [x y] used to estimate the phase  
+%          extra.hf  high frequency band boundaries [x y] used to estimate the
+%                    amplitude envelope
+%           
+
 function [ bio_vals, extra ] = wrapper_PAC(cfg,data)
 
 extra    = [];

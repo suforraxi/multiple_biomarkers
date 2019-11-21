@@ -7,30 +7,43 @@
 path_settings;
 
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-bioNames = {'GC'};
+%bioNames = {'PAC'};
 
-
-compute_bio  = 1;
-save_tbl_fig = 0;
+% flag to decide if compute biomarkers or just plot the results in case the
+% data from the biomarkers was already computed
+compute_bio  = 0;
+save_tbl_fig = 1;
 
 %% compute and save all the biomarkers
-inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
-%subj_info_F      = '/home/matteo/Desktop/analysis_multiple_biomarkers/info/info.tsv';
-outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
 
+% input folder where the raw data in BIDS is stored 
+inDir_data       = '/home/matteo/Desktop/tle_e/converted/';
+%inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
+
+
+% table with information related to subjects 
+% (see batch_compute_different biomakers help for a description of the table 
 subj_info_F      = '/home/matteo/Desktop/analysis_multiple_biomarkers/info/info.tsv';
-%outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 
+% output folder where the results from the computation of the biomarker is
+% stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
+
+outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
+%outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
+
+% output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
+% and figures 
 root_outFolder   = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
 
-% compute biomarkers sequentially
+% compute biomarkers
 if(compute_bio)
     parfor i = 1 : numel(bioNames)
+    %for i = 1 : numel(bioNames)
 
        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,bioNames{i});
     end
 end
-% or run in parallel using a bash script 
+ 
 
 
 %% organize results in tables, plot and save figures
@@ -63,7 +76,7 @@ if(save_tbl_fig)
 
     % regular expression to define the group of patients used to compute the global
     % threshold (cured patients) 
-    cfg.normTempRegExp = '1a_AED_stop\w*';
+    %cfg.normTempRegExp = '1a_AED_stop\w*';
 
     % subjects to remove from the analysis
     cfg.subj2rem       = {                                                        ...                                              

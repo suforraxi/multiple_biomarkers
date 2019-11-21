@@ -1,4 +1,5 @@
-
+% manuscript DOI:   
+%
 % Compute a biomarker for every subjects in BIDS folder
 % Possible biomarkers:
 %   AutoRegressive model Residual (ARR) (Geertsma 2015)
@@ -9,17 +10,20 @@
 %   time-based Granger Causality (GC) (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
 %   Short-time direct Directed Transfer Function (sdDTF)(Mullen 2014 SIFT toolbox)
 
-% cfgBatch.inDir_data    BIDS folder with the data       
-% cfgBatch.subj_info_F   table with information about the subjects (available/pathology/seizure outcome etc etc)   
-
+% cfgBatch.inDir_data    folder with raw data in BIDS format        
+%
+% cfgBatch.subj_info_F   file name of the table with information about the subjects (see batch_compute_different_biomarkers for the description of the table)   
+%
 % cfgBatch.outdir_combi  output folder where to save the biomarker
-%                        computation for grid and strip combined
-% cfgBatch.errorFile     error log file to write the failures
+%                        computation for grid and strip combined (see batch_compute_different_biomarkers for the description of the output struct)
+%
+% cfgBatch.errorFile     error log file to write the failures during the
+%                        computation
 
 function compute_all_situations_bipolar2D(cfgBatch)
 
 
-%% directory to settings
+% directory to settings
 
 inDir_data   = cfgBatch.inDir_data   ; 
 subj_info_F  = cfgBatch.subj_info_F  ;
@@ -58,7 +62,7 @@ subjList(~subj2use) = [];
 subjTODO            = [];
 k                   = 1;
 
-% filter according to a specific format
+% look if the format is specified in every recordings
 for s = 1 : numel(subjList)
     
     sitDir = dir(fullfile(subjList(s).folder,subjList(s).name,'*SITUATION*'));
@@ -72,7 +76,7 @@ for s = 1 : numel(subjList)
 
             jsonSideCar = loadjson(fullfile(jfile2load(1).folder,jfile2load(1).name));
 
-            if (contains(jsonSideCar.iEEGElectrodeGroups,'Format;'))%'Format;Gr[4x5]'
+            if (contains(jsonSideCar.iEEGElectrodeGroups,'Format;'))
                 subjTODO{k,1}   = sitFolder;
                 k = k + 1;
             end
@@ -80,7 +84,7 @@ for s = 1 : numel(subjList)
     end
 end
 
-% filter already computed
+% if already computed skip the data
 subjTODO;
 bioDir   =  cfgBatch.epiBio;
 idx2Skip =  false(size(subjTODO));
@@ -120,7 +124,7 @@ for s = 1 : numel(subjTODO)
     [status,msg,cfg,data] = importBidsData(subjTODO{s});
      
    
-    %% cut the last epoch
+    % cut the last epoch
     if(cfgBatch.cutLast == 1)
         try
             cfgReTrials.trials  = cfgBatch.trials;
@@ -134,7 +138,8 @@ for s = 1 : numel(subjTODO)
             data = [];
         end
     end
-    if(status == 0)
+    if(status == 0) % if the data was correctly imported
+        
         ntrials = size(data.trial,2);
         % select last trial
         cfgLastEp        = [];
@@ -148,7 +153,7 @@ for s = 1 : numel(subjTODO)
 
         end
         
-
+            % apply montage and compute biomarker
             [status,msg,outres] = compute_montage_and_bio(cfg,data);
 
             if(status== 0 && ~isempty(outres))
@@ -167,7 +172,87 @@ end % subjTODO
 fclose(fid_bip);
 
 
-%% montage & biomarker
+% Apply montage and compute biomarker
+% cfg struct with the following fields
+%
+% datasetName  : file name (.vhdr) that will be analysed (see BIDS format)
+% channelFile  : channel file name relative to the channel file in BIDS (see BIDS format) 
+% annotFile    : annotation file we used a custom annotation file for ioECoG (see BIDS + https://github.com/suforraxi/ieeg_respect_bids )
+% noArtefact   : field to remove it is not used anymore
+% inDir_data   : input root directory for the data in BIDS
+% subj_info_F  : file name containing a subject information table with variables specified in (batch_compute_different_biomarkers.m)
+% cutLast      : 1 in order to cut the length amount of data (last minute in our case reduce propofol effect) of the recordings 
+%                0 otherwise    
+% trials       : fieldtrip field used to implement the cut (see ft_preprocessing) 
+% length       : fieldtrip field used to implement the cut (see ft_preprocessing) 
+% overlap      : fieldtrip field used to implement the cut (see ft_preprocessing) 
+% cutTrials    : 1 in order to redefine the trials length 
+%                0 otherwise
+% trials_ct    : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+% length_ct    : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+% overlap_ct   : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+% deT_deM      : 1 to apply detred and demean (see ft_preprocesing)
+%                0 otherwise               
+% notch        : 1 to apply notch filter
+%                0 otherwise   
+% notchBS      : frequency interval where to apply the notch filter 
+%                [low high] (see ft_preprocessing)
+% montage      : 'bipolar_two_directions' apply the bipolar montage for
+%                 grid 5x4 and strip 1x6 or 1x8 (custom function to compute montage see /montage/ folder)
+% outdir_combi : folder name where to save the results (outres see below)
+% errorFile    : file name where to save the failures
+% epiBio       : biomaker name to compute it could be (ARR / PAC / PLV / PLI / H2 / GC / sdDTF )
+%             
+% extra field required, depending on the biomarker
+%  ARR  (see wrapper ARR.m)
+%           windowL : length in samples of the slinding window used to compute the ARR   
+%  PAC  (see wrapper_PAC.m)    
+%           lb: low frequency band boundaries [x y] used to estimate the phase   
+%           hb: high frequency band boundaries [x y] used to estimate the
+%               amplitude envelope
+%  PLI  (see wrapper_PLI.m)
+%           boi : [x y] frequency band boundaries to filter the signals before to compute PLI
+%  PLV  (see wrapper_PLV.m)
+%           boi : [x y] frequency band boundaries to filter the signals before to compute PLV
+%  H2   (see wrapper_H2.m) 
+%           boi : [x y] frequency band boundaries to filter the signals before to compute H2
+%           T   : specify an array of delays to compute H2 (see external/h2delay.m)
+%           n   : number of bins see (external/h2delay.m)
+%  GC   (see wrapper_GCtime.m)
+%           momax : maximal model order to try
+%  sdDTF (see wrapper_sdDTF.m)
+%           morder            :  model order 
+%           freqBand          :  array specifying frequencies of interest
+%           WindowLengthSec   :  window size for trial
+%           WindowStepSizeSec :  step between windows
+%
+%
+% output arguments
+% status 0 the computation was ok 
+%        1 error during the computation
+% msg    error message in case of error
+% outres The generic result is saved in a matlab structure with the following fields
+% 
+%                           outres.hdr          - containing the datasetName from which the
+%                                                 biomarker is computed
+%                           outres.label        - cell array containing the channel names for which
+%                                                 the biomarker is computed 
+%                           outres.time         - cell array containing the time for each trial in
+%                                                 which the original data is divided
+%                           outres.fsample      - sample frequency of the data
+%                           outres.sampleinfo   - sample information corresponding to the samples
+%                                                 in the original recordings from which each trial
+%                                                 computed
+%                           outres.bio          - cell array with an entry per trial of the input
+%                                                 data. Each entry corresponds another cell array
+%                                                 with the computation of the biomarker per each
+%                                                 channel specified by label
+%                                                 (or biomaker statistic, like the strenght for bivariate/ multivariate methods)
+%                           outres.extra        - struct with extra results depending on the
+%                                                 biomaker (see biomarker_wrapper specific function)
+%                           outres.type         - name of the biomaker computed
+           
+
 function [status,msg,outres] = compute_montage_and_bio(cfg,data)
             
         status  = 0;
@@ -178,8 +263,6 @@ function [status,msg,outres] = compute_montage_and_bio(cfg,data)
             [status,msg,outres]    = compute_biomarker(cfg,data);
         end
         
-% generic biomarker computation for strip and grid together 
-% Note: removing bad channels from the bipolar montage (N-N)
 function [status,msg,outres] = compute_biomarker(cfg,data)
           
 status = 0;

@@ -1,4 +1,95 @@
-% wrapper for biomakers
+% generic wrapper for biomakers 
+% all the common pre-processing steps are done in this function like
+% 1) cut the last minute
+% 2) demean and detrend
+% 3) apply notch filter
+
+% INPUT
+% cfg struct with the following fields 
+%         datasetName  : file name (.vhdr) that will be analysed (see BIDS format)
+%         channelFile  : channel file name relative to the channel file in BIDS (see BIDS format) 
+%         annotFile    : annotation file we used a custom annotation file for ioECoG (see BIDS + https://github.com/suforraxi/ieeg_respect_bids )
+%         noArtefact   : field to remove it is not used anymore
+%         inDir_data   : input root directory for the data in BIDS
+%         subj_info_F  : file name containing a subject information table with variables specified in (batch_compute_different_biomarkers.m)
+%         cutLast      : 1 in order to cut the length amount of data (last minute in our case reduce propofol effect) of the recordings 
+%                        0 otherwise    
+%         trials       : fieldtrip field used to implement the cut (see ft_preprocessing) 
+%         length       : fieldtrip field used to implement the cut (see ft_preprocessing) 
+%         overlap      : fieldtrip field used to implement the cut (see ft_preprocessing) 
+%         cutTrials    : 1 in order to redefine the trials length 
+%                        0 otherwise
+%         trials_ct    : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+%         length_ct    : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+%         overlap_ct   : fieldtrip field used to implement the cut (see ft_redefinetrials) 
+%         deT_deM      : 1 to apply detred and demean (see ft_preprocesing)
+%                        0 otherwise               
+%         notch        : 1 to apply notch filter
+%                        0 otherwise   
+%         notchBS      : frequency interval where to apply the notch filter 
+%                        [low high] (see ft_preprocessing)
+%         montage      : 'bipolar_two_directions' apply the bipolar montage for
+%                         grid 5x4 and strip 1x6 or 1x8 (custom function to compute montage see /montage/ folder)
+%         outdir_combi : folder name where to save the results (outres see below)
+%         errorFile    : file name where to save the failures
+%         epiBio       : biomaker name to compute it could be (ARR / PAC / PLV / PLI / H2 / GC / sdDTF )
+% 
+%         extra field required, depending on the biomarker
+%          ARR  (see wrapper ARR.m)
+%                   windowL : length in samples of the slinding window used to compute the ARR   
+%          PAC  (see wrapper_PAC.m)    
+%                   lb: low frequency band boundaries [x y] used to estimate the phase   
+%                   hb: high frequency band boundaries [x y] used to estimate the
+%                       amplitude envelope
+%          PLI  (see wrapper_PLI.m)
+%                   boi : [x y] frequency band boundaries to filter the signals before to compute PLI
+%          PLV  (see wrapper_PLV.m)
+%                   boi : [x y] frequency band boundaries to filter the signals before to compute PLV
+%          H2   (see wrapper_H2.m) 
+%                   boi : [x y] frequency band boundaries to filter the signals before to compute H2
+%                   T   : specify an array of delays to compute H2 (see external/h2delay.m)
+%                   n   : number of bins see (external/h2delay.m)
+%          GC   (see wrapper_GCtime.m)
+%                   momax : maximal model order to try
+%          sdDTF (see wrapper_sdDTF.m)
+%                   morder            :  model order 
+%                   freqBand          :  array specifying frequencies of interest
+%                   WindowLengthSec   :  window size for trial
+%                   WindowStepSizeSec :  step between windows
+% 
+%
+% data  - fieldtrip data structure (see http://www.fieldtriptoolbox.org/)
+%          
+%             data.trial
+%             data.time
+%             data.fsample
+%             data.label
+%             data.sampleinfo
+%               
+%
+% OUTPUT
+%
+% outdata - The generic result is saved in a matlab structure with the following fields
+% 
+%                           outdata.hdr          - containing the datasetName from which the
+%                                                 biomarker is computed
+%                           outdata.label        - cell array containing the channel names for which
+%                                                 the biomarker is computed 
+%                           outdata.time         - cell array containing the time for each trial in
+%                                                 which the original data is divided
+%                           outdata.fsample      - sample frequency of the data
+%                           outdata.sampleinfo   - sample information corresponding to the samples
+%                                                 in the original recordings from which each trial
+%                                                 computed
+%                           outdata.bio          - cell array with an entry per trial of the input
+%                                                 data. Each entry corresponds another cell array
+%                                                 with the computation of the biomarker per each
+%                                                 channel specified by label
+%                                                 (or biomaker statistic, like the strenght for bivariate/ multivariate methods)
+%                           outdata.extra        - struct with extra results depending on the
+%                                                 biomaker (see biomarker_wrapper specific function)
+%                           outdata.type         - name of the biomaker computed
+           
 
 
 function outdata = biomarker_wrapper(cfg,data)

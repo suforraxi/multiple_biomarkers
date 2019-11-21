@@ -1,10 +1,23 @@
+% look if any channels of any trial contains artefacts
+% INPUT
+% s           - sample info information regarding the trials (what samples the trials was originated from the original recordings)            
+% labels      - channel names considered 
+% artefact_T  - table with the following variables
+%               
+%               type    name of the artefact (we have just generic artefact called 'artefact')        
+%               start   sample time of the original data when the artefact starts        
+%               stop    sample time of the original data when the artefact ends
+%               channel channel name where the artefact was found
+% OUTPUT
+%
+% idxArtefact   - array of booleans, the size of the array is equal to the
+%                 number of channels. Every entry contains a boolean, 1
+%                 artefact detected 0 no artefact
+% idx_art_trial - array of booleans, the size of the array is equal to the
+%                 number of trials. Every entry contains 1 if the
+%                 corresponding trial has contains at least one channel
+%                 with an artefact, 0 no artefact   
 function [idxArtefact ,idx_art_trial] = find_artefacts_epochs(s,labels,artefact_T)
-
-
-
-% interval of the epoch
-%s = outres.sampleinfo;
-
 
 artefact_T;
 nArtefacts = numel(artefact_T.type);

@@ -80,10 +80,6 @@
 
 function batch_compute_different_biomarkers(inDir_data,subj_info_F,outrootFolder,bioName)
 
-if(~any(contains(path,'multiple_biomarkers')))
-    addpath('/home/matteo/Desktop/git_rep/multiple_biomarkers');
-    path_settings;
-end
 
 if(strcmp(bioName,'sdDTF'))
     eeglab;
@@ -96,13 +92,29 @@ cfgBatch.inDir_data       = inDir_data;
 cfgBatch.subj_info_F      = subj_info_F;
 
 
-% parameters for the selection of the last 60 seconds
+% parameters for the selection of the last 60 seconds of each recording
+% this choice was made to reduce the propofol influence
 cfgBatch.cutLast          = 1; 
 cfgBatch.trials           = 'all';
 cfgBatch.length           = 60; %seconds of new trials
 cfgBatch.overlap          = 0;
 
-% redefinition of the last minute in smaller trials
+% redefinition of the last minute in smaller trials (5 secs)
+% this choice as an 'harmonization' step among the following papers
+%
+% Geertsema et al. 2015; 
+% Geertsema et al. 2017; 
+% Amiri et al. 2016; 
+% Varatharajah et al. 2018; 
+% Cimbalnik et al. 2019; 
+% Guirgis et al. 2015; 
+% Mormann et al. 2000; 
+% van Dellen et al. 2009; 
+% Van Diessen et al. 2013; 
+% Bettus et al. 2008; 
+% Park and Madsen 2018; 
+% Zweiphenning et al. 2019 
+%
 cfgBatch.cutTrials        = 1;
 cfgBatch.trials_ct        = 'all';
 cfgBatch.length_ct        = 5; %seconds of new trials
