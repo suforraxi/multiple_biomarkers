@@ -2,7 +2,7 @@
 %
 % Batch to compute different biomarkers
 
-% input 
+% INPUT 
 %
 % inDir_data     -   input folder for where the raw data in BIDS is located
 % 
@@ -55,7 +55,7 @@
 %                       H2    Non linear correlation coefficient (Kalitzin 2006)
 %                       GC    Time-based Granger Causality (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
 %                       sdDTF Short-time direct Directed Transfer Function (Mullen 2014 SIFT toolbox)
-%
+% 
 % outrootFolder - The results are saved in the folder specified by outrootFolder see below
 %                     The generic result is saved in a matlab structure named outres with the following fields
 % 

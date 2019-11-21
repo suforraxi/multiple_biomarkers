@@ -11,14 +11,14 @@ bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
 
 % flag to decide if compute biomarkers or just plot the results in case the
 % data from the biomarkers was already computed
-compute_bio  = 0;
-save_tbl_fig = 1;
+compute_bio  = 1;
+save_tbl_fig = 0;
 
 %% compute and save all the biomarkers
 
 % input folder where the raw data in BIDS is stored 
 inDir_data       = '/home/matteo/Desktop/tle_e/converted/';
-%inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
+inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
 
 
 % table with information related to subjects 
@@ -29,7 +29,7 @@ subj_info_F      = '/home/matteo/Desktop/analysis_multiple_biomarkers/info/info.
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 
 outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
-%outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
+outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
 
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 

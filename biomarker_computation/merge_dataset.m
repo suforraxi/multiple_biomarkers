@@ -1,5 +1,5 @@
 % merge the data fields of data1 and data2 in merge_data
-% used to merge grid and strip data
+% used to merge grid data in different directions and strip data
 
 % data1 and data2 - fieldtrip data struct to merge
 % merged_data     - fieldtrip struct containing the merged fields
