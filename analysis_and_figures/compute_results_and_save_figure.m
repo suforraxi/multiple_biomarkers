@@ -62,7 +62,7 @@ cfg.bioNames       = cfg.bioNames;
 
 typeEPI = cfg.typeEPI;  
   
- % Difference between distributions (pooling together all the available channels of different subjects) of 
+% Difference between distributions (pooling together all the available channels of different subjects) of 
 % pre-resection resected biomaker values in improved patients
 
 pooling_channels(cfg)
