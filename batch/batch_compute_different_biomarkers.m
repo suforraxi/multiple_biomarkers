@@ -133,8 +133,8 @@ switch bioName
         % ARR (Geertsema 2017)
         
         cfgBatch.montage      = 'bipolar_two_directions';
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_ARR_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_ARR_2Dbip.txt');
         
         cfgBatch.epiBio  = 'ARR';
         
@@ -144,8 +144,8 @@ switch bioName
         % Phase Amplitude Coupling
         cfgBatch.montage      = 'bipolar_two_directions';
   
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_PAC_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PAC_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PAC';
         
@@ -156,8 +156,8 @@ switch bioName
         % PLI (Stam 2007)
         cfgBatch.montage      = 'bipolar_two_directions';
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_PLI_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLI_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLI';
         
@@ -169,8 +169,8 @@ switch bioName
 
         cfgBatch.montage      = 'bipolar_two_directions';
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_PLV_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLV_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLV';
         
@@ -181,8 +181,8 @@ switch bioName
         
         cfgBatch.montage      = 'bipolar_two_directions';
 
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_H2_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_H2_2Dbip.txt');
         
         cfgBatch.epiBio  = 'H2';
         
@@ -195,8 +195,8 @@ switch bioName
         % GCtime (Park 2018)
         cfgBatch.montage      = 'bipolar_two_directions';
 
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_GC_2Dbip_artfree.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_GC_2Dbip.txt');
         cfgBatch.epiBio       = 'GC';
 
         cfgBatch.notch         = 0;
@@ -208,8 +208,8 @@ switch bioName
        
         cfgBatch.montage      = 'bipolar_two_directions';
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'/combined/');
-        cfgBatch.errorFile    = fullfile(outrootFolder,'/info/errors_sdDTF_2Dbip.txt');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_sdDTF_2Dbip.txt');
         cfgBatch.epiBio       = 'sdDTF';
 
         cfgBatch.morder            = 30;    % model order according to (Zweiphenning 2019)

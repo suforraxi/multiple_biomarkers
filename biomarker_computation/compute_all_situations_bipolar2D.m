@@ -2,7 +2,7 @@
 %
 % Compute a biomarker for every subjects in BIDS folder
 % Possible biomarkers:
-%   AutoRegressive model Residual (ARR) (Geertsma 2015)
+%   AutoRegressive model Residual (ARR) (Geertsma 2017)
 %   Phase Amplitude Coupling (PAC)
 %   Phase Lag Index (PLI) (Stam 2007)
 %   Phase Locking Value (PLV) (Mormann 2000)

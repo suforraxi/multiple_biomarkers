@@ -144,11 +144,11 @@ goi       = {'Joint (T+E)','Temporal','Extra-Temporal'};
 
 
 sOutDef     = 1; % seizure outcome definition @1y 
-toTest      = 2; % index of the subject table to test (improved subject) 
-pathIdx     = 1; % primary pathology index to use (all subject)
+toTest      = 2; % index of the subject table to test (improved subjects) 
+pathIdx     = 1; % primary pathology index to use (all subjects)
 idxCured    = 1; % index cured subjects
 
-typeE       = [1 2 3]; % type of epilepsy index 1 joint / 2 Temporal / 3 Extra-Temporal 
+typeE       = [1 2 3]; % type of epilepsy index 1 joint (Temporal + Extra-Temporal)  / 2 Temporal / 3 Extra-Temporal 
 noHitAnyHit = zeros(length(typeE),2);
 f = [];
 for te = typeE
