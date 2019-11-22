@@ -59,10 +59,19 @@
 
 function create_summary_table_main(cfg)
 
+
+fName2save = cfg.fName2save;
+% create output folder
+[outFolder,~,~] = fileparts(fName2save); 
+
+if(~isfolder(outFolder))
+    mkdir(outFolder);
+end
+
 subj_tbl = create_table(cfg);
 chName   = subj_tbl.chName;
 
-fName2save = cfg.fName2save;
+
 
 
 % remove bad channel N-N or not existing channel N-N 
@@ -71,6 +80,8 @@ if(cfg.removeNNchannels)
     idx2keep = cellfun(@isempty,aux);
     subj_tbl = subj_tbl(idx2keep,:);
 end
+
+
 
 save(fName2save,'subj_tbl');
 writetable(subj_tbl,replace(fName2save,'.mat','.txt'),'Delimiter','tab');
@@ -207,8 +218,8 @@ description_sf_longest = desc_sf_longest;
 [ res_channel, artefact_T] = get_metadata(bidsFolder,sitName_F);
 
 nCh                         = numel(outres.label);
-[idxArtefact,idx_art_trial] = find_marked_artefacts(outres,artefact_T);
-
+%[idxArtefact,idx_art_trial] = find_marked_artefacts(outres,artefact_T);
+[idxArtefact ,idx_art_trial] = find_artefacts_epochs(outres.sampleinfo,outres.label,artefact_T);
 switch(outres.type)
     case {'ARR','PAC'}
         biores      = nanmean(abs(cell2mat(outres.bio)),2);
@@ -277,70 +288,70 @@ if( any(strcmp(ch1,res_channel)) || any(strcmp(ch2,res_channel)) )
     end
 end
 
-function [idxArtefact ,idx_art_trial] = find_marked_artefacts(outres,artefact_T)
-
-
-s = outres.sampleinfo;
-
-
-artefact_T;
-nArtefacts = numel(artefact_T.type);
-ch2remove  = [];
-k          = 1;
-
-idx_art_trial = zeros(1,size(s,1));
-for i = 1 : nArtefacts
-    for e = 1 : size(s,1)
-
-        b_art   = artefact_T.start(i);
-        end_art = artefact_T.stop(i);
-        art_ch  = artefact_T.channel{i};
-
-        if( ~( (s(e,1) > b_art && s(1)> end_art) || ( s(e,end) < b_art && s(e,end) < end_art) ) )
-            if ( s(e,1) > b_art && s(e,end) > end_art )
-                ch2remove{k}  = art_ch;
-                k             = k+1; 
-                idx_art_trial(e) = 1;
-            end
-            if( s(e,1) < b_art && s(e,end) < end_art  )
-                ch2remove{k}  = art_ch;
-                k             = k+1;
-                idx_art_trial(e) = 1;
-            end
-            if( s(e,1) < b_art && s(e,end) > end_art  )
-                ch2remove{k}  = art_ch;
-                k             = k+1;
-                idx_art_trial(e) = 1;
-            end
-            if( s(e,1) > b_art && s(e,end) < end_art  )
-                ch2remove{k}  = art_ch;
-                k             = k+1;
-                idx_art_trial(e) = 1;
-            end
-        end
-    end
-end
-idx_art_trial = logical(idx_art_trial);
-ch2remove    = unique(ch2remove);
-idxArtefact  = zeros(numel(outres.label),1);
-if(~isempty(ch2remove))
-    c_pattern = [];
-    for i = 1 : numel(ch2remove)
-
-        if(i==1)
-            c_pattern = ['\w*' ch2remove{i} '\w*'];
-        else
-            c_pattern = [ c_pattern '|' '\w*' ch2remove{i} '\w*'];
-        end
-
-    end
-        c_pattern = ['(' c_pattern ')'];
-
-       aux      = regexpi(outres.label,c_pattern);
-       idxArtefact = ~cellfun(@isempty,aux);
-       
-        
-end
+% function [idxArtefact ,idx_art_trial] = find_marked_artefacts(outres,artefact_T)
+% 
+% 
+% s = outres.sampleinfo;
+% 
+% 
+% artefact_T;
+% nArtefacts = numel(artefact_T.type);
+% ch2remove  = [];
+% k          = 1;
+% 
+% idx_art_trial = zeros(1,size(s,1));
+% for i = 1 : nArtefacts
+%     for e = 1 : size(s,1)
+% 
+%         b_art   = artefact_T.start(i);
+%         end_art = artefact_T.stop(i);
+%         art_ch  = artefact_T.channel{i};
+% 
+%         if( ~( (s(e,1) > b_art && s(1)> end_art) || ( s(e,end) < b_art && s(e,end) < end_art) ) )
+%             if ( s(e,1) > b_art && s(e,end) > end_art )
+%                 ch2remove{k}  = art_ch;
+%                 k             = k+1; 
+%                 idx_art_trial(e) = 1;
+%             end
+%             if( s(e,1) < b_art && s(e,end) < end_art  )
+%                 ch2remove{k}  = art_ch;
+%                 k             = k+1;
+%                 idx_art_trial(e) = 1;
+%             end
+%             if( s(e,1) < b_art && s(e,end) > end_art  )
+%                 ch2remove{k}  = art_ch;
+%                 k             = k+1;
+%                 idx_art_trial(e) = 1;
+%             end
+%             if( s(e,1) > b_art && s(e,end) < end_art  )
+%                 ch2remove{k}  = art_ch;
+%                 k             = k+1;
+%                 idx_art_trial(e) = 1;
+%             end
+%         end
+%     end
+% end
+% idx_art_trial = logical(idx_art_trial);
+% ch2remove    = unique(ch2remove);
+% idxArtefact  = zeros(numel(outres.label),1);
+% if(~isempty(ch2remove))
+%     c_pattern = [];
+%     for i = 1 : numel(ch2remove)
+% 
+%         if(i==1)
+%             c_pattern = ['\w*' ch2remove{i} '\w*'];
+%         else
+%             c_pattern = [ c_pattern '|' '\w*' ch2remove{i} '\w*'];
+%         end
+% 
+%     end
+%         c_pattern = ['(' c_pattern ')'];
+% 
+%        aux      = regexpi(outres.label,c_pattern);
+%        idxArtefact = ~cellfun(@isempty,aux);
+%        
+%         
+% end
 
 
 

@@ -117,6 +117,14 @@ cfg.outFolder   = cfg.outFolderMaxComparison;
 cfg.Msize       = 14;
 cfg.seizOutIdx  = [cfg.seizOut_idx];
 
+
+% create output folder
+
+if(~isfolder(cfg.outFolderMaxComparison))
+    mkdir(cfg.outFolderMaxComparison);
+end
+
+
 compare_max_distributions(cfg,out);
 
 
@@ -371,6 +379,12 @@ end
 f = gcf;
 f.PaperOrientation = 'landscape';
 set(f, 'Position', get(0, 'Screensize'));
+% create output folder
+[outFolder,~,~] = fileparts(cfg.poolingChannelFile); 
+
+if(~isfolder(outFolder))
+    mkdir(outFolder);
+end
 print(cfg.poolingChannelFile ,'-dpng')
 close all
 

@@ -56,13 +56,14 @@
 % have the same sitName/ subjName / paht_desc / typeEPI etc etc.
 % 
 
-% input configuration structure cfg
+% INPUT 
+% configuration structure cfg
 %
-% cfg.tbl2load     - filename with the table to load
-% cfg.path_groups  - pathology group index to compute (see primary patology class)
-% cfg.seizOut2try  - cell of regular expression to define the seizure outcome groups where to test the global
+% cfg.tbl2load     - cell with fileNames with the tables to load
+% cfg.path_groups  - pathology group index to compute (see primary pathology class in create_summary_table_main)
+% cfg.seizOut2try  - cell of regular expressions to define the seizure outcome groups where to test the global
 %                    threshold
-% cfg.typeEPI      - cell of regular expression defining the epilepsy type (/w* = all , T = temporal, E = extra-temporal ) 
+% cfg.typeEPI      - cell of regular expressions defining the epilepsy type (/w* = all , T = temporal, E = extra-temporal ) 
 % cfg.subj2rem     - cell with subject codes to exclude from the analysis
 
 % output struct with the following field
@@ -115,6 +116,35 @@ end
 
 out.max_T = max_T;
 
+%
+% INPUT
+% struct with the following fields
+% cfg.ctbl2load        cell with file name of the table to load
+% cfg.sf_var           variable to consider for the seizure outcome (description_sf_1y or description_sf_longest see create_summary_table_main)
+% cfg.maxXcondRegExp   cell with a regular expression to define the seizure outcome groups where to test the global threshold
+% cfg.subj2rem         cell with subject codes to exclude from the analysis
+% cfg.pathology_group  integer relative to the pathology group (1:10 see create_summary_table_main) 
+% cfg.typeEPI          cell of regular expression defining the epilepsy type (/w* = all , T = temporal, E = extra-temporal see create_summary_table_main) 
+% 
+% OUTPUT
+% maxXcond_T        table with the following fields 
+%                   subjName     - coded subject name
+%                   postNR_sit   - situation name from post-resection where
+%                                  the maximum value of the biomarker is found 
+%                   post_chName  - channel name where the the maximum value of the biomarker is found
+%                   postNR_val   - biomarker value corresponding to the maximum post-resection 
+%                   preR_sit     - situation name from pre-resection recordings where
+%                                  the maximum value of the biomarker is found across resected channels 
+%                   preR_chName  - channel name where the the maximum value
+%                                  of the biomarker is found across resected channels 
+%                   preR_val     - biomarker value corresponding to the
+%                                  maximum across pre-resection resected channels
+%                   preNR_sit    - situation name from pre-resection recordings where
+%                                  the maximum value of the biomarker is found across not resected channels
+%                   preNR_chName - channel name where the the maximum value
+%                                  of the biomarker is found across not resected channels
+%                   preNR_val    - biomarker value corresponding to the
+%                                  maximum across pre-resection not resected channels
 function [maxXcond_T] = get_max_tbls(cfg)
 
 condName = {'postNR','preR','preNR'};
@@ -197,45 +227,3 @@ for s = 1 : numel(ids)
     end
 end
 
-% % Extract the biomarker values according to the class (RES/CUT/NRES pre & post)
-% % and rename them in preR / preNR / postNR 
-% 
-% function [vals,G_idx,new_tbl] = getValXclass_pre_post_R_NR(subj_tbl)
-% 
-% resected_idx  = strcmp(subj_tbl.resected,'RES');
-% cut_idx       = strcmp(subj_tbl.resected,'CUT');
-% nresected_idx = strcmp(subj_tbl.resected,'NRES');
-% 
-% pre_idx  = ~cellfun(@isempty,regexp(subj_tbl.sitName,'SITUATION1\w*'));
-% post_idx = ~cellfun(@isempty,regexp(subj_tbl.sitName,'SITUATION[^1]\w*'));
-% 
-% 
-% preR   = subj_tbl.biomarker(pre_idx  & resected_idx );
-% preNR  = subj_tbl.biomarker(pre_idx  & nresected_idx);
-% postNR = subj_tbl.biomarker(post_idx & nresected_idx);
-% 
-% chName_preR   = subj_tbl.chName(pre_idx  & resected_idx);
-% chName_preNR  = subj_tbl.chName(pre_idx  & nresected_idx);
-% chName_postNR = subj_tbl.chName(post_idx & nresected_idx);
-% 
-% 
-% vals = [preR ;preNR ; postNR];
-% G_idx = [repmat({'preR'},size(preR,1),1) ; repmat({'preNR'},size(preNR,1),1) ; repmat({'postNR'},size(postNR,1),1)];
-% 
-% sName_preR   = subj_tbl.sitName(pre_idx  & resected_idx );
-% sName_preNR  = subj_tbl.sitName(pre_idx  & nresected_idx);
-% sName_postNR = subj_tbl.sitName(post_idx & nresected_idx);
-% 
-% subName_preR   = subj_tbl.subjName(pre_idx & resected_idx);
-% subName_preNR  = subj_tbl.subjName(pre_idx & nresected_idx);
-% subName_postNR = subj_tbl.subjName(post_idx& nresected_idx);
-% 
-% 
-% val_tbl  = array2table([ preR ; preNR ; postNR],'VariableNames',{'biomarker'});
-% ch_tbl   = array2table([ chName_preR  ; chName_preNR ; chName_postNR],'VariableNames',{'chName'});
-% sit_tbl  = array2table([ sName_preR ; sName_preNR ; sName_postNR],'VariableNames',{'sitName'});
-% sub_tbl  = array2table([ subName_preR ; subName_preNR ; subName_postNR],'VariableNames',{'subjName'});
-% 
-% 
-% 
-% new_tbl  = [sub_tbl sit_tbl ch_tbl val_tbl];

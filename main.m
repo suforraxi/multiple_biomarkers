@@ -7,7 +7,7 @@
 path_settings;
 % biomarker names to compute
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-%bioNames = {'PAC','sdDTF'};
+
 
 % flag to decide if compute biomarkers or just plot the results in case the
 % data from the biomarkers was already computed
@@ -30,7 +30,7 @@ subj_info_F      = '/home/matteo/Desktop/replicate_analysis/info/info.tsv';
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 
-%outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
+outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 %outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
 outFolder        = '/home/matteo/Desktop/replicate_analysis/';
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
@@ -40,8 +40,8 @@ root_outFolder   = '/home/matteo/Desktop/replicate_analysis/';
 
 % compute biomarkers
 if(compute_bio)
-    parfor i = 1 : numel(bioNames)
-    %for i = 1 : numel(bioNames)
+    %parfor i = 1 : numel(bioNames)
+    for i = 1 : numel(bioNames)
 
        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,bioNames{i});
     end
