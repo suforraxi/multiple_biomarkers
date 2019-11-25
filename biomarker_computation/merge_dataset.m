@@ -1,7 +1,8 @@
 % merge the data fields of data1 and data2 in merge_data
 % used to merge grid data in different directions and strip data
-
+% INPUT
 % data1 and data2 - fieldtrip data struct to merge
+% OUTPUT
 % merged_data     - fieldtrip struct containing the merged fields
 %
 % Note it removes channels not present indicated by N-N in the name for

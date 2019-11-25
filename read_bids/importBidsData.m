@@ -1,3 +1,22 @@
+% Import intra-operative corticography recordings saved in BIDS format  (see https://github.com/suforraxi/ieeg_respect_bids) 
+% 
+% INPUT 
+% 
+% inDir       - folder name of the situation to import 
+%
+%
+% OUTPUT
+% status      - 0 if the import was successful 1 in case of error
+% msg         - string with the error message in case of error
+% cfg         - struct with details about the dataset
+% data        - fieldtrip data structure (see http://www.fieldtriptoolbox.org/)
+%          
+%                     data.trial
+%                     data.time
+%                     data.fsample
+%                     data.label
+%                     data.sampleinfo
+
 function [status,msg,cfg,data] = importBidsData(inDir)
 try  
     status      = 0;

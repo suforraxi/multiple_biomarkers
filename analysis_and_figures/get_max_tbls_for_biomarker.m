@@ -65,7 +65,8 @@
 %                    threshold
 % cfg.typeEPI      - cell of regular expressions defining the epilepsy type (/w* = all , T = temporal, E = extra-temporal ) 
 % cfg.subj2rem     - cell with subject codes to exclude from the analysis
-
+%
+% OUTPUT
 % output struct with the following field
 % out.max_T       -  three dimensional cell with a table for each cell relative to    
 %              

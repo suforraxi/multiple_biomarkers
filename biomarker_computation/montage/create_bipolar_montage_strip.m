@@ -1,11 +1,11 @@
 %create bipolar montage for strip 
-
+% INPUT
 % ch_label - channel names 
 % data     - (ch X samples) data matrix 
-
+% OUTPUT
 % strip2use - strip labels available for which it was possible to compute
 %             the bipolar montage
-% outdata   - bipolar trasformation for the strip (i.e Str1-Str2)
+% outdata   - bipolar trasformation for the strip (i.e Str1-Str2) (channel X time sample)
 function [strips2use,outdata]=create_bipolar_montage_strip(ch_label,data)
 
 

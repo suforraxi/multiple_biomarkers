@@ -1,11 +1,11 @@
 %create bipolar montage for grid 5x4 on the transversal direction 
-
+% INPUT
 % ch_label - channel names 
 % data     - (ch X samples) data matrix 
-
+% OUTPUT
 % grid2use - grid labels available for which it was possible to compute the
 %            bipolar montage
-% outdata  - bipolar trasformation for the grid (i.e Gr1-Gr6)
+% outdata  - bipolar trasformation for the grid (i.e Gr1-Gr6) (channel X time sample)
 function [grid2use,outdata]=create_bipolar_montage_5by4Y(ch_label,data)
 
 % extract grid channels

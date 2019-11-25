@@ -1,5 +1,5 @@
-%% compute sdDTF (see Mullen 2014 SIFT toolbox and  Zweiphenning 2019)
-% wrapper GC time domain (see Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox and Park 2018)
+% compute sdDTF (see Mullen 2014 SIFT toolbox and  Zweiphenning 2019)
+% 
 % INPUT
 % cfg - struct with the following field        
 %           cfg.morder            :  model order to use for the estimation
@@ -69,6 +69,9 @@ for i = 1: ntrial
     end
 end
 
+% code adapted from code used by in the manuscript Zweiphenning 2019 for
+% the sdDTF
+%
 function res = compute_sdDTF(cfg,hdr,data)
 
 res = [];

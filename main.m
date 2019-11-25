@@ -1,4 +1,4 @@
-% main script manuscript DOI:
+% main script
 
 
 
@@ -7,12 +7,12 @@
 path_settings;
 % biomarker names to compute
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-
+%bioNames = {'GC'};
 
 % flag to decide if compute biomarkers or just plot the results in case the
 % data from the biomarkers was already computed
-compute_bio  = 1;
-save_tbl_fig = 0;
+compute_bio  = 0;
+save_tbl_fig = 1;
 
 % compute and save all the biomarkers
 
@@ -32,7 +32,7 @@ subj_info_F      = '/home/matteo/Desktop/replicate_analysis/info/info.tsv';
 
 outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 %outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
-outFolder        = '/home/matteo/Desktop/replicate_analysis/';
+%outFolder        = '/home/matteo/Desktop/replicate_analysis/';
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %root_outFolder   = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
@@ -40,8 +40,8 @@ root_outFolder   = '/home/matteo/Desktop/replicate_analysis/';
 
 % compute biomarkers
 if(compute_bio)
-    %parfor i = 1 : numel(bioNames)
-    for i = 1 : numel(bioNames)
+    parfor i = 1 : numel(bioNames)
+    %for i = 1 : numel(bioNames)
 
        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,bioNames{i});
     end
@@ -106,8 +106,8 @@ if(save_tbl_fig)
     cfg.alpha_level                   = 0.01            ;
 
     % selection of a specific pathology group (i.e. MST, FCD etc they are coded
-    % in information table) or all subjects
-    cfg.path_label                 = {'all'};
+    % in information table) or all subjects (see primary pathology class in create_summary_table_main)
+  
     cfg.path_group                 = {[0]};
     % pathology group to consider according to what group is investigated 
     cfg.path_idx_of_interest       = 1;

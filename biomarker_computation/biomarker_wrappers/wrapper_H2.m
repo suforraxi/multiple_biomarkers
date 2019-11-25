@@ -1,5 +1,5 @@
 % wrapper H2 (Kalitzin 2006)
-
+%
 % INPUT
 % cfg - struct with the following field        
 %        cfg.boi : [x y] frequency band boundaries to filter the signals before to compute H2

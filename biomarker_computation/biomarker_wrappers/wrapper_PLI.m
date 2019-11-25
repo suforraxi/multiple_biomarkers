@@ -1,5 +1,5 @@
 % wrapper PLI (Stam 2007)
-
+%
 % INPUT
 % cfg - struct with the following field        
 %        cfg.boi : [x y] frequency band boundaries to filter the signals before to compute PLI

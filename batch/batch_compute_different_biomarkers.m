@@ -1,4 +1,4 @@
-% Functions for manuscript DOI:
+
 %
 % Batch to compute different biomarkers
 

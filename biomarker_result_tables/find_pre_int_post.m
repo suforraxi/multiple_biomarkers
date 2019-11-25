@@ -1,4 +1,14 @@
-% find pre / intermediate / post situations 
+% find pre / intermediate / post situations  
+%
+% INPUT
+% situations - cell array containing situations names
+% 
+% 
+% OUTPUT
+%
+% pre    - cell array with the name of the pre-resection situations
+% inter  - cell array with the name of the intermidiate situations
+% post   - cell array with the name of the post-resection situations
 function [pre,inter,post] = find_pre_int_post(situations)
 
 pre   = [];

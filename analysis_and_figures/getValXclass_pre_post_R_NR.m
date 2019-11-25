@@ -1,6 +1,26 @@
 % Extract the biomarker values according to the class (RES/CUT/NRES pre & post)
 % and rename them in preR / preNR / postNR 
-
+% 
+% INPUT
+% subj_tbl - table (see create_summary_table_main for the layout)
+%
+%
+% OUTPUT
+% vals    - array of double (relative to the biomaker) organized in three
+%           classes pre-resection resected / pre-resection not resected /
+%           post-resection
+% G_idx   - cell arry of labels 
+%                               'preR' for pre-resection resected 
+%                               'preNR' for pre-resection not resected 
+%                               'postNR' for  post-resection 
+% new_tbl - table with the four variables
+%                               
+%                               subjName  - coded name of the subject (RESPXXXX)
+%                               sitName   - name of the situation considered      
+%                               chName    - name of the channel considered    
+%                               biomarker - double, biomarker value
+%                                           
+%
 function [vals,G_idx,new_tbl] = getValXclass_pre_post_R_NR(subj_tbl)
 
 resected_idx  = strcmp(subj_tbl.resected,'RES');

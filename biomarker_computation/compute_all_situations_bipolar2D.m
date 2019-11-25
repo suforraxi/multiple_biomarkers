@@ -1,4 +1,4 @@
-% manuscript DOI:   
+   
 %
 % Compute a biomarker for every subjects in BIDS folder
 % Possible biomarkers:
@@ -9,7 +9,7 @@
 %   H2 non linear correlation coefficient (Kalitzin 2006)
 %   time-based Granger Causality (GC) (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
 %   Short-time direct Directed Transfer Function (sdDTF)(Mullen 2014 SIFT toolbox)
-
+% INPUT
 % cfgBatch.inDir_data    folder with raw data in BIDS format        
 %
 % cfgBatch.subj_info_F   file name of the table with information about the subjects (see batch_compute_different_biomarkers for the description of the table)   

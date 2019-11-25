@@ -1,12 +1,19 @@
-% Obtain information about the computation of the biomarker for 
-% every situations or at least a pre-resection and post-resection
-% situation
+% Obtain information about the computation of the biomarker for a subject
+% Specifically check if the biomaker was computed for all the available
+% situations and if there is at least one situation per pre-resection and
+% one situation post-resection
 %
+% 
+% INPUT
 % cfg.bidsDir     - directory name of bids project
 % cfg.resDir      - directory name of the result (biomarker computed 
 %                   according to a specific format)
 %
-% analysis_info_T - table (subjName/all situations completed/any pre andany post)
+% OUTPUT
+% analysis_info_T - table with the following variables
+%                       Row            - coded subject name (RESPXXXX)
+%                       all_completed  - integer, 1 if for all the available situations the biomarker was computed 0 otherwise
+%                       anyPRE_anyPOST - integer, 1 if the biomarker was computed for at least one pre-resection situation and one post-resection situation 0 otherwise
 function [ analysis_info_T ] = collect_info_about_situations_main(cfg)
 
 bidsDir = cfg.bidsDir;

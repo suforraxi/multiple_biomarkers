@@ -1,5 +1,5 @@
 % 
-% Setting path for all the dependencies for manuscript DOI:
+% Setting path for all the dependencies
 % All the matlab functions and toolboxes required
 % They are freely available on the web
 
@@ -36,11 +36,6 @@ run(fullfile(mvgc_root,'startup.m'));
 
 % eeglab (https://sccn.ucsd.edu/eeglab/index.php)
 
-%addpath(sprintf('%s%splugins%sfirfilt2.3',eeglab_root,filesep,filesep))
-%addpath(sprintf('%s%splugins%sdipfit3.2',eeglab_root,filesep,filesep))
-%addpath(sprintf('%s%splugins%sBiosig3.3.0%sbiosig%st250_ArtifactPreProcessingQualityControl',eeglab_root,filesep,filesep,filesep,filesep))
-%addpath(sprintf('%s%splugins%sBiosig3.3.0%sbiosig%st200_FileAccess',eeglab_root,filesep,filesep,filesep,filesep))
-%addpath(sprintf('%s%splugins%sBiosig3.3.0',eeglab_root,filesep,filesep))
 addpath(sprintf('%s%splugins',eeglab_root,filesep))
 addpath(sprintf('%s%sfunctions%ssigprocfunc',eeglab_root,filesep,filesep))
 addpath(sprintf('%s%sfunctions',eeglab_root,filesep))

@@ -1,12 +1,26 @@
 % count how many grid 5 by 4 +  zero strip / one strip / two strips or more
+% 
+% INPUT
+% cfg struct with the following fields
+%  bidsDir  - folder name of the raw data organized in BIDS format (see https://github.com/suforraxi/ieeg_respect_bids)
+%  InfoF    - file name of the information table (see batch_compute_different_biomarkers)
+% 
+% OUTPUT
+% sit_info_T - table with the following variables 
+%                          nameXsit      - name of the situation file considered                     
+%                          subjNameXsit  - coded name of the subject (RESPXXXX)              
+%                          formatXsit    - format of the grid/strip used for the recording (see create_summary_table_main for details)            
+%                          nGridXsit     - number of grid used in the situation 
+%                          nStripXsit    - number of strip used in the situation
+%                          nExcXsit      - number of format exceptions
 
 function sit_info_T = format_info_main(cfg)
 
-bidsDir  = cfg.bidsDir;  %'/home/matteo/Desktop/tle/converted/';
+bidsDir  = cfg.bidsDir; 
 % load information file with subjects
-tleInfoF = cfg.tleInfoF; %'/home/matteo/Desktop/tle/info/info_T.mat';
+InfoF    = cfg.InfoF; 
 
-info_T   = readtable(tleInfoF,'Delimiter','\t','FileType','text','ReadRowNames',1,'ReadVariableNames',1);
+info_T   = readtable(InfoF,'Delimiter','\t','FileType','text','ReadRowNames',1,'ReadVariableNames',1);
 
 %load(tleInfoF);
 
