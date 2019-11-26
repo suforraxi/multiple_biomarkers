@@ -411,6 +411,8 @@ for te = idx_typeEPI
     
 end
 
+
+
 % order the joint set according to type of epilepsy
 
 jointGroup_names = hitXtypeEPI{1}.Row;
@@ -475,4 +477,28 @@ set(f, 'Position', get(0, 'Screensize'));
 saveas(f,fullfile(outFolder,'combiningBio'),'png')
 close(f);
 
+
+
+%%
+sum_T = [];
+for i = 1 : numel(hitXtypeEPI)
+    
+    sum_T = [sum_T; varfun(@sum,hitXtypeEPI{i})];
+    
+end
+sum_T.Properties.RowNames = {'Joint','Temporal','Extra-temporal'};
+
+sum_T.Properties.VariableNames = replace(sum_T.Properties.VariableNames,'sum_','');
+
+greaterThXBio = cell(size(numSubjXbio,1),size(numSubjXbio,2)); 
+for te = 1 : size(numSubjXbio,1)
+    for bio = 1 : size(numSubjXbio,2)
+    
+        greaterThXBio{te,bio} = strcat(num2str(sum_T{te,bio}),' / ',num2str(numSubjXbio(te,bio)));
+    end
+end
+
+greaterThXBio_T = cell2table(greaterThXBio,'VariableNames',sum_T.Properties.VariableNames,'RowNames',sum_T.Properties.RowNames);
+
+writetable(greaterThXBio_T,fullfile(outFolder,'typeEpiXBiomarker_table'),'FileType','text','Delimiter','tab','WriteRowNames',1)
 
