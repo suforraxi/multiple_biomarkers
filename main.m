@@ -30,9 +30,9 @@ subj_info_F      = '/home/matteo/Desktop/replicate_analysis/info/info.tsv';
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 
-outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
+%outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 %outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
-%outFolder        = '/home/matteo/Desktop/replicate_analysis/';
+outFolder        = '/home/matteo/Desktop/replicate_analysis/combined/';
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %root_outFolder   = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
@@ -92,8 +92,8 @@ if(save_tbl_fig)
                          };
 
     % regular expression defining the epilepsy type (all/ T = temporal, E = extra-temporal ) 
-    cfg.typeEPI = {'\w*','T','E'};  
-
+    cfg.typeEPI       = {'\w*','T','E'};  
+    cfg.typeEPI_label = {'Joint_T_E','Temporal','Extra_Temporal'};
     % seizure outcome to consider (i.e. after one year/longer)
     cfg.sf_class   = {'description_sf_1y'};
 
@@ -102,19 +102,21 @@ if(save_tbl_fig)
 
 
     % comparison between maximum distribution per subject
-    cfg.bioMarker2plotMaxDistribution = [1 2 3 4 5 6 7 ];  
+    cfg.bioMarker2plotMaxDistribution = [1 2 4 5 6  ];  % plot only biomarkers that are significant in the group analysis pooling channels 
     cfg.alpha_level                   = 0.01            ;
 
     % selection of a specific pathology group (i.e. MST, FCD etc they are coded
     % in information table) or all subjects (see primary pathology class in create_summary_table_main)
-  
-    cfg.path_group                 = {[0]};
+   
+    cfg.path_group                    = {[0]};
+    cfg.path_group_label              = {'all_primary_pathologies'};
     % pathology group to consider according to what group is investigated 
-    cfg.path_idx_of_interest       = 1;
+    cfg.path_idx_of_interest          = 1;
+    
     % regular expression to define the seizure outcome groups where to test the global
     % threshold (pre-resection recordings in improved patients (1A|1B Engel))
-    cfg.seizOut2try                = {'1a_AED_stop\w*','1(a|b)\w*'};
-    cfg.seizOut_idx                = [1 2];
+    cfg.seizOut2try                   = {'1a_AED_stop\w*','1(a|b)\w*'};
+    cfg.seizOut_idx                   = [1 2];
 
     %regular expression to define improved patients for the group analysis
     %pooling the channels together

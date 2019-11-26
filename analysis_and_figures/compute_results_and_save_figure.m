@@ -53,7 +53,8 @@
 %       subj2rem                      -  cell array of subject to remove
 %                                        from the analysis i.e {'RESPXXX','RESPYYY'}
 %       typeEPI                       -  cell array of regular expressions (see rem_subj_from_tbl )
-%                                        indicating the type of epilepsy i.e. {'\w*'  'T'  'E'} (see select_typeEPI) 
+%                                        indicating the type of epilepsy i.e. {'\w*'  'T'  'E'} (see select_typeEPI)
+%       typeEPI_label                 -  cell array of labels for type of epilepsy i.e. {'Joint','Temporal',Extra-Temporal} 
 %       sf_class                      -  cell array describing the seizure
 %                                        outcome variable to use i.e {'description_sf_1y'} or {'description_sf_longest'} 
 %       bioNames                      -  cell array of possible biomarker to compute i.e {'ARR'  'PAC'  'PLV'  'PLI'  'H2'  'GC'  'sdDTF'}
@@ -64,6 +65,7 @@
 %       alpha_level                   -  alpha level for the two sample one-sided Kolmogorov-Smirnov test
 %       path_group                    -  cell array of integers (see
 %                                        primary pathology class in create_summary_table_main) if 0 means all the pathologies 
+%       path_group_label              -  cell array of labels corresposing to the primary pathology class considered
 %       path_idx_of_interest          -  index to relative to the primary
 %                                        pathology class to study (see get_max_tbls_for_biomarker)
 %       seizOut2try                   -  cell array of regular expressions relative to which group of subjects to select i.e. cured or improved {'1a_AED_stop\w*'  '1(a|b)\w*'}
@@ -96,8 +98,9 @@ for d = 1 : numel(inFolder)
 
     cfg.fName2save = fullfile(rootSummaryFolder,strcat('summary_tbl_',inFolder(d).name,'.mat'));
     
-    create_summary_table_main(cfg)
-
+    if(~isfile(cfg.fName2save)) % if the summary table is not present create it
+        create_summary_table_main(cfg)
+    end
 end
 
 
@@ -144,7 +147,8 @@ pooling_channels(cfg)
 %                                  of the biomarker is found across not resected channels
 %                   preNR_val    - biomarker value corresponding to the
 %                                  maximum across pre-resection not resected channels
-out = [];  
+out           = [];
+
  for e = 1: numel(typeEPI) 
      
      cfg.typeEPI = typeEPI{e};  
@@ -338,7 +342,7 @@ for te = 1 : size(out,1)
     
     f2.PaperOrientation = 'landscape';
     set(f2, 'Position', get(0, 'Screensize'));
-    print(sprintf('%smaxPreR_vs_Post_violinplot_%i',outFolder,te),'-dpng')
+    print(sprintf('%smaxPreR_vs_Post_violinplot_%s',outFolder,cfg.typeEPI_label{te}),'-dpng')
     close(f2)
 end
 
@@ -393,12 +397,16 @@ for te = typeE
 
     for i = 1 : numBio
 
-
+        % look for the maximum across all channels / all situations
+        % post-resecion / all subjects cured after surgery (i.e. all 1A Engel who stopped medication after operation: 1A_AED_stop)
         normTemp(i,1) = max(out{te,sOutDef}.max_T{i,pathIdx,idxCured}.postNR_val);
 
         preRvals      = out{te,sOutDef}.max_T{i,pathIdx,toTest}.preR_val(idxSujb2use);
+        % how many subjects in the pre-resection recordings have at least
+        % one resected channel bigger than the threshold computed on post-resection
+        % cured subjects 
         idx_aboveTh   = preRvals > normTemp(i);
-
+        
         hits (:,i)     = idx_aboveTh;
     end
 
