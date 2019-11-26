@@ -126,6 +126,9 @@ typeEPI = cfg.typeEPI;
 
 pooling_channels(cfg)
 
+
+
+
 % compute maximum table per type of epilepsy / seizure outcome group
 % Each element of the cell out contains a struct with three dimensional cell biomaker X pathology group X seizure outcome group
 % each cell contains a table with the following variables
@@ -190,9 +193,9 @@ compare_max_distributions(cfg,out);
 
 
 % combining all biomarkers toghether as a 'cumulative' biomarker
-combining_all_the_biomarkers(cfg,out)
+%combining_all_the_biomarkers(cfg,out)
 
-
+using_all_biomarkers_as_a_whole(cfg,out)
 
 
 
@@ -347,7 +350,108 @@ for te = 1 : size(out,1)
 end
 
 
+% Results using combining all biomarkers together.
+% Save the following figures
+% - Three histograms corresponding to: the joint group (Temporal + Extra-Temporal), the Temporal group and Extra-Temporal group
+%       * Histogram y-axix  number of biomarkers above the threshold (max biomarker across post-resection situations in cured subjects) x-axis subject name    
+% - Histogram combining all biomarkers together: if at least one biomarker in the pre-resection resected channles is above the threshold it counts as a successful detection 
+%   
+%
+function using_all_biomarkers_as_a_whole(cfg,out)
 
+outFolder            = cfg.outFolderMaxComparison;
+bioNames             = cfg.bioNames;
+idx_improved         = 2; 
+idx_cured            = 1;
+idx_seizout_variable = 1;
+idx_path_group       = 1;
+idx_typeEPI          = [1 2 3]; % joint / temporal / extra-temporal
+
+hitXtypeEPI = cell(1,length(idx_typeEPI));
+numBio      = length(bioNames);
+numSubjXbio = zeros(length(idx_typeEPI),numBio);
+for te = idx_typeEPI  
+
+    % check the maximum number of subject for whom there is a maximum values in
+    % the pre-resection resected variable
+    for i = 1 : numBio 
+        numSubjXbio(te,i) = sum(~isnan(out{te,idx_seizout_variable}.max_T{i,idx_path_group,idx_improved}.preR_val));
+    end
+
+    [maxNumSubj, idx_Max_SubjNumber] = max(numSubjXbio(te,:));
+
+    % number of subjects with at least one channel in the pre-resection that was resected and had a value bigger than the threshold computed on the cured  
+    hits           = zeros(maxNumSubj,numBio);
+    idx_subjNotNaN = ~isnan(out{te,idx_seizout_variable}.max_T{idx_Max_SubjNumber,idx_path_group,idx_improved}.preR_val);
+    subjNameNotNaN = out{te,idx_seizout_variable}.max_T{idx_Max_SubjNumber,idx_path_group,idx_improved}.subjName(idx_subjNotNaN);
+    hit_T          = array2table(hits,'VariableNames',bioNames,'RowNames',subjNameNotNaN);
+    
+    for i = 1 : numBio
+
+        % look for the maximum across all channels / all situations
+        % post-resecion / all subjects cured after surgery (i.e. all 1A Engel who stopped medication after operation: 1A_AED_stop)
+        normThreshold = nanmax(out{te,idx_seizout_variable}.max_T{i,idx_path_group,idx_cured}.postNR_val);
+        
+        idxNotNaN     = ~isnan(out{te,idx_seizout_variable}.max_T{i,idx_path_group,idx_improved}.preR_val);
+        
+        subjNotNaN    = out{te,idx_seizout_variable}.max_T{i,idx_path_group,idx_improved}.subjName(idxNotNaN);
+        preRvals      = out{te,idx_seizout_variable}.max_T{i,idx_path_group,idx_improved}.preR_val(idxNotNaN);
+        % how many subjects in the pre-resection recordings have at least
+        % one resected channel bigger than the threshold computed on post-resection
+        % cured subjects 
+        idx_aboveTh   = preRvals > normThreshold;
+        subjBiggerTH  = subjNotNaN(idx_aboveTh);
+        
+        hit_T{subjBiggerTH,i} = 1;
+
+       
+    end
+    
+    hitXtypeEPI{te} = hit_T;
+    
+end
+
+% order the joint set according to type of epilepsy
+
+jointGroup_names = hitXtypeEPI{1}.Row;
+idx_temporal     = 2;
+for i = 1 : numel(jointGroup_names)
+        if(any(strcmp(jointGroup_names{i},hitXtypeEPI{idx_temporal}.Row)))
+            
+            hitXtypeEPI{1}.Row{i} = strcat('T','_',hitXtypeEPI{1}.Row{i});
+        else
+            hitXtypeEPI{1}.Row{i} = strcat('E','_',hitXtypeEPI{1}.Row{i});
+        end
+end
+
+[~, idx_sorted ]= sort(hitXtypeEPI{1}.Row);
+
+hitXtypeEPI{1} = hitXtypeEPI{1}(idx_sorted,:); 
+
+hitXtypeEPI;
+
+
+goi = {'Joint (T+E)','Temporal','Extra-Temporal'};
+
+for i = 1 : numel(hitXtypeEPI)
+
+    numSubj     = size(hitXtypeEPI{i},1);
+    totHitXsubj = sum(hitXtypeEPI{i}.Variables,2);
+    f           = figure;
+    bar(totHitXsubj)
+    xticks(1:numSubj);
+    xticklabels(hitXtypeEPI{i}.Row)
+    a = gca;
+    a.TickLabelInterpreter = 'none';
+    xtickangle(45)
+    ylabel('Number of biomakers above threshold')
+    xlabel('subjects')
+    title(goi{i},'FontSize',14);
+    
+    set(f, 'Position', get(0, 'Screensize'));
+    saveas(f,fullfile(outFolder,strcat('hits_per_subjects','_',goi{i})),'png')
+    close(f);
+end
 
 
 % using all biomarker together
@@ -360,7 +464,7 @@ end
 % (ARR/PAC/PLV/PLI/H2/GC/sdDTF) X (all/High-Low Glioma/MST/FCD/ etc etc )  X (cured/improved/all)
 % see ( get_max_tbls_for_biomarker )
 function combining_all_the_biomarkers(cfg,out)
-close all
+
 
 % info table
 
