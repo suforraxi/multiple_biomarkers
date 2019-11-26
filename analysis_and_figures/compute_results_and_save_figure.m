@@ -353,8 +353,8 @@ end
 % Results using combining all biomarkers together.
 % Save the following figures
 % - Three histograms corresponding to: the joint group (Temporal + Extra-Temporal), the Temporal group and Extra-Temporal group
-%       * Histogram y-axix  number of biomarkers above the threshold (max biomarker across post-resection situations in cured subjects) x-axis subject name    
-% - Histogram combining all biomarkers together: if at least one biomarker in the pre-resection resected channles is above the threshold it counts as a successful detection 
+%       * Histogram y-axis  number of biomarkers above the threshold (max biomarker across post-resection situations in cured subjects) x-axis subject name    
+% - Histogram combining all biomarkers together: if at least one biomarker in the pre-resection resected channels is above the threshold it counts as a successful detection 
 %   
 %
 function using_all_biomarkers_as_a_whole(cfg,out)
@@ -430,7 +430,7 @@ hitXtypeEPI{1} = hitXtypeEPI{1}(idx_sorted,:);
 
 hitXtypeEPI;
 
-
+% save per hits per subject 
 goi = {'Joint (T+E)','Temporal','Extra-Temporal'};
 
 for i = 1 : numel(hitXtypeEPI)
@@ -453,184 +453,26 @@ for i = 1 : numel(hitXtypeEPI)
     close(f);
 end
 
-
-% using all biomarker together
-
-% out cell with the different groups  
-%     type of epilepsy            X seizure outcome definition 
-% (Joint/Temporal/ExtraTemporal)  X (@1y / @longest)
-% max_T cell with tables 
-%      biomarker index          X primary pathology group              X seizure freedom class
-% (ARR/PAC/PLV/PLI/H2/GC/sdDTF) X (all/High-Low Glioma/MST/FCD/ etc etc )  X (cured/improved/all)
-% see ( get_max_tbls_for_biomarker )
-function combining_all_the_biomarkers(cfg,out)
-
-
-% info table
-
-info_F = cfg.info_F;
-info_T = readtable(info_F,'FileType','text','Delimiter','tab','ReadVariableNames',1);
-info_T = info_T(:,{'subjID','primary_path_class','description_sf_1y','typeEPI'});
-
-
-outFolder = cfg.outFolderMaxComparison;
-fileNames = {'matrix_hits','subjhits_bar','atleast_bar'} ;
-goi       = {'Joint (T+E)','Temporal','Extra-Temporal'};
-bioNames  = cfg.bioNames;
-
-
-sOutDef     = 1; % seizure outcome definition @1y 
-toTest      = 2; % index of the subject table to test (improved subjects) 
-pathIdx     = 1; % primary pathology index to use (all subjects)
-idxCured    = 1; % index cured subjects
-
-typeE       = [1 2 3]; % type of epilepsy index 1 joint (Temporal + Extra-Temporal)  / 2 Temporal / 3 Extra-Temporal 
-noHitAnyHit = zeros(length(typeE),2);
-f = [];
-for te = typeE
-    
-    numBio   = size(out{te,sOutDef}.max_T,1);
-   
-    normTemp = zeros(numBio,1);
-    % consider only the subjects with a value in as maximum, sometimes it
-    % is not possible to compute the measure because there  were not enough
-    % epochs (i.e. every epoch with at least one channel with artefacts)
-    idxSujb2use   = ~isnan(out{te,sOutDef}.max_T{1,pathIdx,toTest}.preR_val);
-    hits          = zeros(sum(idxSujb2use),numBio);
-
-
-    for i = 1 : numBio
-
-        % look for the maximum across all channels / all situations
-        % post-resecion / all subjects cured after surgery (i.e. all 1A Engel who stopped medication after operation: 1A_AED_stop)
-        normTemp(i,1) = max(out{te,sOutDef}.max_T{i,pathIdx,idxCured}.postNR_val);
-
-        preRvals      = out{te,sOutDef}.max_T{i,pathIdx,toTest}.preR_val(idxSujb2use);
-        % how many subjects in the pre-resection recordings have at least
-        % one resected channel bigger than the threshold computed on post-resection
-        % cured subjects 
-        idx_aboveTh   = preRvals > normTemp(i);
-        
-        hits (:,i)     = idx_aboveTh;
-    end
-
-    subjNames   = out{te,sOutDef}.max_T{1,pathIdx,toTest}.subjName;
-    idxSujb2use = ~isnan(out{te,sOutDef}.max_T{1,pathIdx,toTest}.preR_val);
-    subjNames   = subjNames(idxSujb2use);
-
-
-    bioHitXsubj = sum(hits,2); 
-   
-
-
-    subjName_T = cell2table(subjNames,'VariableNames',{'subjID'});
-    hits_T     = array2table(hits,'VariableNames',bioNames);
-    tot_hits_T = array2table(bioHitXsubj,'VariableNames',{'totBioHits'});
-
-    cum_hits_T = [subjName_T hits_T tot_hits_T];
-
-    usedSubj_T = innerjoin(cum_hits_T,info_T,'Keys','subjID');
-
-    [~,idx_sorted] = sort(usedSubj_T.typeEPI);
-
-    ordered_hits_T     = usedSubj_T(idx_sorted,bioNames);
-    ordered_tot_hits_T = usedSubj_T(idx_sorted,{'totBioHits'});
-    ordered_subjName_T = usedSubj_T(idx_sorted,{'subjID'});
-    ordered_path_T     = usedSubj_T(idx_sorted,{'primary_path_class'});
-    ordered_te_T       = usedSubj_T(idx_sorted,{'typeEPI'});
-
-
-    hits_m       = ordered_hits_T.Variables;
-    tot_hits_v   = ordered_tot_hits_T.Variables;
-    path_v       = ordered_path_T.Variables;
-    ord_subjName = ordered_subjName_T.subjID;
-
-    m            = hits_m.*repmat(path_v,1,size(hits_m,2));
-
-
-    for i = 1 : numel(ord_subjName)
-        ord_subjName{i} = strcat(ord_subjName{i},'_',ordered_te_T.typeEPI{i});  
-    end
-    % matrix with primary pathology
-    f(1) = figure;
-    imagesc(m');
-
-    primary_path = {'a) High Grade Tumor (WHO III + IV)',...
-                    'b) Low Grade Tumor (WHO I + II)',   ...
-                    'c) MTS',                            ...
-                    'd) FCD',                            ...
-                    'e) no abnormalities',               ...
-                    'f) cavernoma',                      ...
-                    'g) gliosis/scar',                   ...
-                    'h) AVM',                            ...
-                    'i) malformation cort. development', ...
-                    'l) TuberoSclerosis'
-                    };
-
-    colorbar('Ticks',1:numel(primary_path),'TickLabels',primary_path)
-    colormap('jet')
-    xticks(1:numel(ord_subjName));
-    xticklabels(ord_subjName)
-    xtickangle(45)
-    yticklabels(bioNames)
-    title(goi{te},'FontSize',14)
-    % how many biomarkers above the treshold X subject
-    f(2) = figure;
-    bar(tot_hits_v)
-    xticks(1:numel(ord_subjName));
-    xticklabels(ord_subjName)
-    xtickangle(45)
-    ylabel('Number of biomakers above threshold')
-    xlabel('subjects')
-    title(goi{te},'FontSize',14)
-
-    cumBioHit = zeros(1,numBio);
-
-
-    for i = 1 : numBio
-
-        cumBioHit(i) = sum(bioHitXsubj >= i); 
-    end
-
-    noHits = sum(bioHitXsubj == 0);
-
-    noHitAnyHit(te,1)   = noHits; 
-    noHitAnyHit(te,end) = cumBioHit(1);
-    
-    cumBioHit = [noHits cumBioHit];
-    numHits   = [0 1:numBio];
-    % how many biomarkers above the treshold in terms of subjects
-    f(3) = figure;
-    numBioLabel = categorical({'0','at least 1',...
-        'at least 2','at least 3',...
-        'at least 4','at least 5',...
-        'at least 6','at least 7'}); 
-    bar(numBioLabel,cumBioHit)
-    ylabel('Number of subjects')
-    xlabel('Number of biomaker above threshold')
-    title(goi{te},'FontSize',14)
-    
-    for i = 1 : numel(f)
-        set(f(i), 'Position', get(0, 'Screensize'));
-        saveas(f(i),fullfile(outFolder,strcat(fileNames{i},'_',goi{te})),'png')
-    end
-    
-end
-close all
-
-figure;
-typeE_label = {'Joint (T+E)','Temporal','Extra-Temporal'};
+% combining biomarkers save cumulative hits (no hits / number of hits across subjects)
+goi         = {'Joint (T+E)','Temporal','Extra-Temporal'};
 numBioLabel = categorical({'0','at least 1'}); 
-for i = 1 : size(noHitAnyHit,1)
+f   = figure;
+for i = 1 : numel(hitXtypeEPI)
+
+    totHitXsubj = sum(hitXtypeEPI{i}.Variables,2);
     
-    subplot(1,size(noHitAnyHit,1),i)
-    bar(numBioLabel,noHitAnyHit(i,:))
+    subplot(1,numel(hitXtypeEPI),i)
+    noHit            = sum(totHitXsubj == 0); 
+    numberAtLeastOne = sum(totHitXsubj ~= 0);
+    
+    bar(numBioLabel,[noHit numberAtLeastOne]);
     ylabel('Number of subjects')
     xlabel('Number of biomakers above threshold')
-    title(typeE_label{i},'FontSize',14)
+    title(goi{i},'FontSize',14)
+        
 end
-f = gcf;
 set(f, 'Position', get(0, 'Screensize'));
-saveas(f,fullfile(outFolder,'noHitAnyHit_j_t_e'),'png')
-close all
+saveas(f,fullfile(outFolder,'combiningBio'),'png')
+close(f);
+
 
