@@ -130,11 +130,20 @@ ntrial = numel(data.trial);
 
 [~,outdata.hdr.datasetName,~] = fileparts(cfg.datasetName); 
 
+
+
+
+[~,fName,~]                    = fileparts(cfg.datasetName);
+[ res_channel, artefact_T]     = get_metadata(cfg.inDir_data,fName);
+[idxChArtefact ,idx_art_trial] = find_artefacts_epochs(data.sampleinfo,data.label,artefact_T);
+
+cfgCH.channel = data.label(~idxChArtefact);
+data          = ft_preprocessing(cfgCH,data);  
+
 outdata.label      = data.label;
 outdata.time       = data.time;
 outdata.fsample    = data.fsample;
 outdata.sampleinfo = data.sampleinfo;
-
 
 switch cfg.epiBio
     case 'ARR'

@@ -31,14 +31,14 @@ bio_vals = [];
 
 
 
-[~,fName,~]                  = fileparts(cfg.datasetName);
-[ res_channel, artefact_T]   = get_metadata(cfg.inDir_data,fName);
-[idxArtefact ,idx_art_trial] = find_artefacts_epochs(data.sampleinfo,data.label,artefact_T);
+%[~,fName,~]                  = fileparts(cfg.datasetName);
+%[ res_channel, artefact_T]   = get_metadata(cfg.inDir_data,fName);
+%[idxArtefact ,idx_art_trial] = find_artefacts_epochs(data.sampleinfo,data.label,artefact_T);
 
 
 % remove trials with artefacts
-cfgRedefine.trials = find(~idx_art_trial);
-data               = ft_redefinetrial(cfgRedefine,data);
+%cfgRedefine.trials = find(~idx_art_trial);
+%data               = ft_redefinetrial(cfgRedefine,data);
 
 ntrial = size(data.trial,2);
 

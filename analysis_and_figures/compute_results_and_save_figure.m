@@ -198,6 +198,14 @@ compare_max_distributions(cfg,out);
 using_all_biomarkers_as_a_whole(cfg,out)
 
 
+res_analysis.out                 = out;
+res_analysis.seizOUT             = cfg.seizOut2try;
+res_analysis.path_group_label    = cfg.path_group_label;
+res_analysis.typeEPI             = cfg.typeEPI_label;
+res_analysis.seizOutVariable     = cfg.sf_class;
+
+save(fullfile(cfg.outFolderMaxComparison,'max_tables'),'res_analysis') % save max tables
+
 
 % compare distributions pre-resection in improved patients vs post-resection cured pooling channels  
 function pooling_channels(cfg)
@@ -319,7 +327,7 @@ for te = 1 : size(out,1)
       
        subplot(1,numel(idx2plot),i)
        
-       catNames = [repmat({'PRE resected'},size(pre_val),1); repmat({'POST'},size(post_val),1)] ;
+       catNames = [repmat({'PRE resected'},size(pre_val),1 ); repmat({'POST'},size(post_val),1)] ;
        viol = violinplot([pre_val;post_val], catNames);
        viol(1).ViolinColor = [0 0 1];
        viol(2).ViolinColor = [1 0 0];
