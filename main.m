@@ -33,6 +33,8 @@ subj_info_F      = '/home/matteo/Desktop/replicate_analysis/info/info.tsv';
 %outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
 %outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
 outFolder        = '/home/matteo/Desktop/replicate_analysis/combined/';
+
+%outFolder        = '/home/matteo/Desktop/replicate_analysis/combined_removing_trials/';
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %root_outFolder   = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
@@ -44,7 +46,7 @@ if(compute_bio)
     %for i = 1 : numel(bioNames)
 
        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,bioNames{i});
-    end
+    end    
 end
  
 
@@ -89,6 +91,7 @@ if(save_tbl_fig)
                           'RESP0640','RESP0644', ...                                  % hfo trial 
                           'RESP0353','RESP0623'  ...                                  % no last post recording
                           'RESP0218','RESP0301'  ...                                  % frequency sample not 2048
+                          'RESP0118' ...                                              % no resected channels
                          };
 
     % regular expression defining the epilepsy type (all/ T = temporal, E = extra-temporal ) 
@@ -102,8 +105,8 @@ if(save_tbl_fig)
 
 
     % comparison between maximum distribution per subject
-    cfg.bioMarker2plotMaxDistribution = [1 2 4 5 6  ];  % plot only biomarkers that are significant in the group analysis pooling channels 
-    cfg.alpha_level                   = 0.01            ;
+    cfg.bioMarker2plotMaxDistribution = [1 2 4 5 6 ];  % plot only biomarkers that are significant in the group analysis pooling channels 
+    cfg.alpha_level                   = 0.01; % alpha level for the Kolmogorov-Smirnov test
 
     % selection of a specific pathology group (i.e. MST, FCD etc they are coded
     % in information table) or all subjects (see primary pathology class in create_summary_table_main)
