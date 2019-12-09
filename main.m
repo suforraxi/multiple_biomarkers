@@ -1,13 +1,11 @@
 % main script
 
-
-
 % setting all funciton dependencies
-
 path_settings;
+
 % biomarker names to compute
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-%bioNames = {'GC'};
+
 
 % flag to decide if compute biomarkers or just plot the results in case the
 % data from the biomarkers was already computed
@@ -18,27 +16,24 @@ save_tbl_fig = 1;
 
 % input folder where the raw data in BIDS is stored 
 inDir_data       = '/home/matteo/Desktop/tle_e/converted/';
-%inDir_data       = '/home/matteo/Desktop/analysis_multiple_biomarkers/converted/'; 
+
 
 
 % table with information related to subjects 
 % (see batch_compute_different biomakers help for a description of the table 
-%subj_info_F      = '/home/matteo/Desktop/analysis_multiple_biomarkers/info/info.tsv';
-subj_info_F      = '/home/matteo/Desktop/replicate_analysis/info/info.tsv';
-
+subj_info_F       = '/home/matteo/Desktop/rep_analysis/info/info.tsv';
 
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 
-%outFolder        = '/home/matteo/Desktop/tle_e/zscore_notch/2Dbip/combined/';
-%outFolder        = '/home/matteo/Desktop/analysis_multiple_biomarkers/biomarker_res/';
-outFolder        = '/home/matteo/Desktop/replicate_analysis/combined/';
+outFolder        = '/home/matteo/Desktop/rep_analysis/combined/';
 
-%outFolder        = '/home/matteo/Desktop/replicate_analysis/combined_removing_trials/';
+
+
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
-%root_outFolder   = '/home/matteo/Desktop/analysis_multiple_biomarkers/';
-root_outFolder   = '/home/matteo/Desktop/replicate_analysis/';
+%
+root_outFolder   = '/home/matteo/Desktop/rep_analysis/';
 
 % compute biomarkers
 if(compute_bio)
