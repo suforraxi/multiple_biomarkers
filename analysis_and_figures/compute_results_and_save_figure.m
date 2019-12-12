@@ -75,7 +75,22 @@
 %                                        analysis pooling channels i.e. {'1(a|b)\w*'} for improved patients
 %       removeNNchannels              -  1 to remove the channels labeled N-N in the name 0 to leave them 
 %       
-%       
+%     
+
+%     Copyright (C) 2019 Matteo Demuru
+% 
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 function compute_results_and_save_figure(cfg)
 
 

@@ -1,0 +1,32 @@
+Pipeline analysis of the manuscript : 
+
+
+Analysis of inter-ictal intracranial intra-operative corticography recordings (ioECoG)
+Different signal biomarker are computed
+
+-   AutoRegressive model Residual (ARR) (Geertsma 2017)
+-   Phase Amplitude Coupling (PAC)
+-   Phase Lag Index (PLI) (Stam 2007)
+-   Phase Locking Value (PLV) (Mormann 2000)
+-   H2 non linear correlation coefficient (Kalitzin 2006)
+-   time-based Granger Causality (GC) (Lionel Barnett and Anil K. Seth, 2014 MVGC Toolbox)
+-   Short-time direct Directed Transfer Function (sdDTF)(Mullen 2014 SIFT toolbox)
+
+
+For more information contact: suforraxi@gmail.com
+
+These software is free but copyrighted software, distributed
+under the terms of the GNU General Public Licence as published by
+the Free Software Foundation (either version 3, or at your option
+any later version). 
+See the file COPYING for more details.
+
+The functions are copyrighted by their respective authors:
+Matteo Demuru,  SEIN, UMCU
+
+Copyright (C) 2017-2019, Stichting Epilepsie Instellingen Nederland (SEIN)
+Copyright (C) 2017-2019, Universitair Medisch Centrum Utrecht (UMCU) 
+
+
+These functions includes functions from other toolboxes that are covered under 
+their respective licenses. See multiple_biomarkers/external for details

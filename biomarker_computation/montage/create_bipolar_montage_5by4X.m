@@ -6,6 +6,21 @@
 % grid2use - grid labels available for which it was possible to compute the
 %            bipolar montage
 % outdata  - bipolar trasformation for the grid (i.e Gr1-Gr2) (channel X time sample)
+
+%     Copyright (C) 2019 Matteo Demuru
+% 
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 function [grid2use,outdata]=create_bipolar_montage_5by4X(ch_label,data)
 
 % extract grid channels
