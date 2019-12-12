@@ -126,7 +126,9 @@ typeEPI = cfg.typeEPI;
 
 pooling_channels(cfg)
 
+% Difference between hippocampal and neocortical channels
 
+hippo_vs_neo_main(cfg)
 
 
 % compute maximum table per type of epilepsy / seizure outcome group
