@@ -337,6 +337,11 @@ for te = 1 : size(out,1)
        
        ymax = max([pre_val;post_val]);
        
+       % threshold for healthy tissue 
+       xLine = [1 2];
+       yLine = [max(post_val) max(post_val)];
+       line(xLine,yLine,'Color','green','LineStyle','--')
+       
        
        switch c_bioName
           case {'ARR','PAC'}
@@ -453,12 +458,18 @@ for i = 1 : numel(hitXtypeEPI)
     xticklabels(hitXtypeEPI{i}.Row)
     a = gca;
     a.TickLabelInterpreter = 'none';
+    a.FontSize = 13;
     xtickangle(45)
-    ylabel('Number of biomakers above threshold')
-    xlabel('subjects')
+   
+    ylabel('Number of biomakers above threshold','FontSize',14)
+    xlabel('subjects','FontSize',14)
     title(goi{i},'FontSize',14);
     
+    
+    
+    f.PaperOrientation = 'landscape';
     set(f, 'Position', get(0, 'Screensize'));
+    
     saveas(f,fullfile(outFolder,strcat('hits_per_subjects','_',goi{i})),'png')
     close(f);
 end
@@ -476,11 +487,14 @@ for i = 1 : numel(hitXtypeEPI)
     numberAtLeastOne = sum(totHitXsubj ~= 0);
     
     bar(numBioLabel,[noHit numberAtLeastOne]);
-    ylabel('Number of subjects')
-    xlabel('Number of biomakers above threshold')
+    ylabel('Number of subjects','FontSize',14)
+    xlabel('Number of biomakers above threshold','FontSize',14)
     title(goi{i},'FontSize',14)
+    a = gca;  
+    a.FontSize = 14;
         
 end
+f.PaperOrientation = 'landscape';
 set(f, 'Position', get(0, 'Screensize'));
 saveas(f,fullfile(outFolder,'combiningBio'),'png')
 close(f);
