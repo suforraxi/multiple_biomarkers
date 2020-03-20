@@ -275,7 +275,7 @@ for i = 1 :numel(cfg.tbl2load)
     viol(2).ViolinColor = [1 0 0];
 
 
-    title(cfg.bioNames{i},'FontSize',13)
+    title(cfg.bioNames{i},'FontSize',13,'Interpreter','none')
 
     switch cfg.bioNames{i}
       case {'ARR','PAC'}
@@ -350,7 +350,9 @@ for te = 1 : size(out,1)
        viol(2).ViolinColor = [1 0 0];
        
        c_bioName = bioNames{idx2plot(i)}; 
-       title(c_bioName)
+      
+       set(gca,'FontSize',10);
+       title(c_bioName,'FontSize',14,'Interpreter','none')
        
        ymax = max([pre_val;post_val]);
        
@@ -367,6 +369,7 @@ for te = 1 : size(out,1)
           otherwise
               ylabel(sprintf('max strength per subject',c_bioName))
        end
+       
        
        if(round(p(te,i),2) <= alpha_level) % plot asteriks if significant
             plot(xMarker,ymax,'*','MarkerSize',MSize)
@@ -481,7 +484,8 @@ for i = 1 : numel(hitXtypeEPI)
     ylabel('Number of biomakers above threshold','FontSize',14)
     xlabel('subjects','FontSize',14)
     title(goi{i},'FontSize',14);
-    
+    ylim([0 7])
+    ytickformat('%.0f')
     
     
     f.PaperOrientation = 'landscape';

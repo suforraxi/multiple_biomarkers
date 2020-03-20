@@ -77,7 +77,11 @@
 %                           outres.extra        - struct with extra results depending on the
 %                                                 biomaker (see biomarker_wrapper specific function)
 %                           outres.type         - name of the biomaker computed
-
+%
+%
+%
+% bi_boi         - bivariate band of interest, an array representing the
+%                  filter settings where to filter [low high] (i.e. [30 80] for gamma band)
 
 %     Copyright (C) 2019 Matteo Demuru
 % 
@@ -94,7 +98,7 @@
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-function batch_compute_different_biomarkers(inDir_data,subj_info_F,outrootFolder,bioName)
+function batch_compute_different_biomarkers(inDir_data,subj_info_F,outrootFolder,bioName,bi_boi)
 
 
 if(strcmp(bioName,'sdDTF'))
@@ -143,6 +147,9 @@ cfgBatch.deT_deM           = 1;
 cfgBatch.notch   = 1;
 cfgBatch.notchBS = [49 51]; % line noise at 50Hz
 
+% bivariate band of interest
+
+
 switch bioName
 
     case 'ARR'
@@ -165,19 +172,19 @@ switch bioName
         
         cfgBatch.epiBio  = 'PAC';
         
-        cfgBatch.lb      = [4 8];  % low band where to compute phase
-        cfgBatch.hb      = [30 80];% high band where to compute amplitude  
+        cfgBatch.lb      = [3 4];%[4 8];  % low band where to compute phase
+        cfgBatch.hb      = [80 500];%[30 80];% high band where to compute amplitude  
 
     case 'PLI'
         % PLI (Stam 2007)
         cfgBatch.montage      = 'bipolar_two_directions';
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLI_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLI';
         
-        cfgBatch.boi     = [30 80]; % PLI for band of interest
+        cfgBatch.boi     = bi_boi; % PLI for band of interest
 
         compute_all_situations_bipolar2D(cfgBatch)
     case 'PLV'
@@ -185,24 +192,24 @@ switch bioName
 
         cfgBatch.montage      = 'bipolar_two_directions';
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLV_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLV';
         
-        cfgBatch.boi     = [30 80];  % PLV for band of interest
+        cfgBatch.boi     = bi_boi;  % PLV for band of interest
 
     case 'H2'
         % H2 (Kalitzin 2006)
         
         cfgBatch.montage      = 'bipolar_two_directions';
 
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_H2_2Dbip.txt');
         
         cfgBatch.epiBio  = 'H2';
         
-        cfgBatch.boi     = [30 80];   % H2 for band of interest
+        cfgBatch.boi     = bi_boi;   % H2 for band of interest
         cfgBatch.T       = -68:17:68; % delays where to compute H2 in samples 
         cfgBatch.n       = 100;       % number of bins see (external/h2delay.m)
       

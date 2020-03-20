@@ -21,8 +21,11 @@
 path_settings;
 
 % biomarker names to compute
+%bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
+bioNames = {'PLV','PLI','H2'};
+bioNames = {'PAC'};
+bioNames = {'PAC_theta_HFA','PAC_theta_gamma'};
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-
 
 % flag to decide if compute biomarkers or just plot the results in case the
 % data from the biomarkers was already computed
@@ -38,26 +41,40 @@ inDir_data       = '/home/matteo/Desktop/tle_e/converted/';
 
 % table with information related to subjects 
 % (see batch_compute_different biomakers help for a description of the table 
-subj_info_F       = '/home/matteo/Desktop/rep_analysis/info/info.tsv';
+subj_info_F       = '/home/matteo/Desktop/mb_reviewers/info/info.tsv';%'/home/matteo/Desktop/rep_analysis/info/info.tsv';
 
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
-
-outFolder        = '/home/matteo/Desktop/rep_analysis/combined/';
+%bandDir          = '13_30';
+outFolder        = fullfile('/home/matteo/Desktop/mb_reviewers/combined/combined_PAC/');%'/home/matteo/Desktop/rep_analysis/combined/';
 
 
 
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %
-root_outFolder   = '/home/matteo/Desktop/rep_analysis/';
+root_outFolder   = '/home/matteo/Desktop/mb_reviewers/';%'/home/matteo/Desktop/rep_analysis/';
+
+bi_boi   = {[1 4],[4 8],[8 13],[13 30]};
+
+
+
+% choose PAC only once;
+
+biomarker = repmat(bioNames,1,4);
+bi_boi    = repmat(bi_boi,1,3);
+
+%biomarker = ['PAC' , biomarker];
+%bi_boi    = [[0 0],bi_boi];
+
+N = numel(biomarker);
 
 % compute biomarkers
 if(compute_bio)
-    parfor i = 1 : numel(bioNames)
-    %for i = 1 : numel(bioNames)
-
-       batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,bioNames{i});
+    parfor i = 1 : N
+        
+        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,biomarker{i},bi_boi{i});
+        
     end    
 end
  
@@ -81,7 +98,7 @@ if(save_tbl_fig)
     % Result folder where the computed biomarkers are saved 
     cfg.rootInResFolder   = outFolder;
     % Folder where to save the summary tables
-    cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables'); 
+    cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables','new_pool'); 
 
     % out filename for the comparison of distributions pre and post pooling all
     % channel together
@@ -118,6 +135,9 @@ if(save_tbl_fig)
 
     % comparison between maximum distribution per subject
     cfg.bioMarker2plotMaxDistribution = [1 2 4 5 6 ];  % plot only biomarkers that are significant in the group analysis pooling channels 
+   % cfg.bioMarker2plotMaxDistribution = [1 2 3 ];  % plot only biomarkers that are significant in the group analysis pooling channels 
+   % cfg.bioMarker2plotMaxDistribution = [1 2];  % plot only biomarkers that are significant in the group analysis pooling channels 
+   
     cfg.alpha_level                   = 0.01; % alpha level for the Kolmogorov-Smirnov test
 
     % selection of a specific pathology group (i.e. MST, FCD etc they are coded
