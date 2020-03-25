@@ -197,7 +197,7 @@ for i = 1 : numel(subjList)
                                           desc_sf_longest,...
                                           path_desc,...
                                           typeEPI,...
-                                          HFOstudy);
+                                          HFOstudy,cfg.montage);
         
         sitDesXsubj  = [sitDesXsubj ; sitDes_T];             
     end
@@ -208,7 +208,7 @@ end
 
 
 
-function sitDes_T = get_sit_descriptor(bidsFolder,resFolder,format_T,desc_sf_1y,desc_sf_longest,path_desc,typeEPI,HFOstudy)
+function sitDes_T = get_sit_descriptor(bidsFolder,resFolder,format_T,desc_sf_1y,desc_sf_longest,path_desc,typeEPI,HFOstudy,montage)
 
 sitName_F = format_T.nameXsit{1};
 
@@ -252,7 +252,7 @@ biom_v = zeros(nCh,1);
 for i = 1 : numel(idxGch)  
     
     chName_v{i,1}   = outres.label{idxGch(i)};
-    resected_v{i,1} = get_resected_label(chName_v{i,1},res_channel);
+    resected_v{i,1} = get_resected_label(chName_v{i,1},res_channel,montage);
     
     artefact_v(i,1) = idxArtefact(idxGch(i));
 
@@ -298,21 +298,29 @@ sitDes_T = table(repmat({fileName_v},[nCh 1]),   ...
              );
 sitDes_T;
 
-function res_notR_cut = get_resected_label(chName,res_channel)
+function res_notR_cut = get_resected_label(chName,res_channel,montage)
+
+res_notR_cut = [];
+switch montage
+    case 'bipolar_two_directions'
+        ch = regexpi(chName,'(\w*\d+)[N]?-[N]?(\w*\d+)','tokens');
+
+        ch1 = ch{1}{1}; 
+        ch2 = ch{1}{end};
 
 
-
-ch = regexpi(chName,'(\w*\d+)[N]?-[N]?(\w*\d+)','tokens');
-
-ch1 = ch{1}{1}; 
-ch2 = ch{1}{end};
-
-
-res_notR_cut = 'NRES';
-if( any(strcmp(ch1,res_channel)) || any(strcmp(ch2,res_channel)) )
-    if(any(strcmp(ch1,res_channel)) && any(strcmp(ch2,res_channel)))
-        res_notR_cut = 'RES';
-    else
-        res_notR_cut = 'CUT';
-    end
+        res_notR_cut = 'NRES';
+        if( any(strcmp(ch1,res_channel)) || any(strcmp(ch2,res_channel)) )
+            if(any(strcmp(ch1,res_channel)) && any(strcmp(ch2,res_channel)))
+                res_notR_cut = 'RES';
+            else
+                res_notR_cut = 'CUT';
+            end
+        end
+    case 'avg'
+        if(any(strcmp(chName,res_channel)))
+              res_notR_cut = 'RES';
+        else
+             res_notR_cut = 'NRES';
+        end
 end

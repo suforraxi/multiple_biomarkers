@@ -273,10 +273,9 @@ function [status,msg,outres] = compute_montage_and_bio(cfg,data)
         msg    = [];
         outres = [];
         
-        if(strcmp(cfg.montage,'bipolar_two_directions'))
-            [status,msg,outres]    = compute_biomarker(cfg,data);
-        end
         
+        [status,msg,outres]    = compute_biomarker(cfg,data);
+         
 function [status,msg,outres] = compute_biomarker(cfg,data)
           
 status = 0;
@@ -284,14 +283,24 @@ msg    = [];
 try
     outres = [];
    
-   
-     m_data_grid  = compute_montage_grid(cfg,data);
-     
-     m_data_strip = compute_montage_strip(cfg,data);
-     
-     m_data  = merge_dataset( m_data_grid,m_data_strip);
-     
-     
+    switch cfg.montage
+        case 'bipolar_two_direction'
+                 m_data_grid  = compute_montage_grid(cfg,data);
+
+                 m_data_strip = compute_montage_strip(cfg,data);
+
+                 m_data  = merge_dataset( m_data_grid,m_data_strip);
+        case 'avg'
+            
+             cfgM.reref       = 'yes';
+             cfgM.refmethod   = 'avg';
+             cfgM.implicitref = [];
+             cfgM.refchannel  = 'all';
+             m_data           = ft_preprocessing(cfgM,data);
+                  
+    end
+    
+    
     if(~isempty(m_data))
         outres = biomarker_wrapper(cfg,m_data);
     end

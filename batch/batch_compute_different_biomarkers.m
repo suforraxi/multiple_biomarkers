@@ -98,7 +98,7 @@
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-function batch_compute_different_biomarkers(inDir_data,subj_info_F,outrootFolder,bioName,bi_boi)
+function batch_compute_different_biomarkers(inDir_data,subj_info_F,outrootFolder,bioName,bi_boi,montage)
 
 
 if(strcmp(bioName,'sdDTF'))
@@ -149,14 +149,14 @@ cfgBatch.notchBS = [49 51]; % line noise at 50Hz
 
 % bivariate band of interest
 
-
+montage_str = montage;%'avg';%'bipolar_two_directions';
 switch bioName
 
     case 'ARR'
         % ARR (Geertsema 2017)
         
-        cfgBatch.montage      = 'bipolar_two_directions';
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.montage      = montage_str;
+        cfgBatch.outdir_combi = fullfile(outrootFolder,filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_ARR_2Dbip.txt');
         
         cfgBatch.epiBio  = 'ARR';
@@ -165,9 +165,9 @@ switch bioName
 
     case 'PAC'        
         % Phase Amplitude Coupling
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
   
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep);
+        cfgBatch.outdir_combi = fullfile(outrootFolder,filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PAC_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PAC';
@@ -177,9 +177,9 @@ switch bioName
 
     case 'PLI'
         % PLI (Stam 2007)
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
+        cfgBatch.outdir_combi = fullfile(outrootFolder,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLI_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLI';
@@ -190,9 +190,9 @@ switch bioName
     case 'PLV'
         % PLV (Mormann 2000)
 
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
+        cfgBatch.outdir_combi = fullfile(outrootFolder,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_PLV_2Dbip.txt');
         
         cfgBatch.epiBio  = 'PLV';
@@ -202,9 +202,9 @@ switch bioName
     case 'H2'
         % H2 (Kalitzin 2006)
         
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
 
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined',filesep,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
+        cfgBatch.outdir_combi = fullfile(outrootFolder,strcat(num2str(bi_boi(1)),'_',num2str(bi_boi(end))),filesep);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_H2_2Dbip.txt');
         
         cfgBatch.epiBio  = 'H2';
@@ -216,9 +216,9 @@ switch bioName
 
     case 'GC'
         % GCtime (Park 2018)
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
 
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.outdir_combi = fullfile(outrootFolder);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_GC_2Dbip.txt');
         cfgBatch.epiBio       = 'GC';
 
@@ -229,9 +229,9 @@ switch bioName
     case 'sdDTF'
         % sdDTF (Zweiphenning 2019)
        
-        cfgBatch.montage      = 'bipolar_two_directions';
+        cfgBatch.montage      = montage_str;
         
-        cfgBatch.outdir_combi = fullfile(outrootFolder,'combined');
+        cfgBatch.outdir_combi = fullfile(outrootFolder);
         cfgBatch.errorFile    = fullfile(outrootFolder,'errorlog','errors_sdDTF_2Dbip.txt');
         cfgBatch.epiBio       = 'sdDTF';
 

@@ -56,10 +56,21 @@ for i = 1 : numel(tbl2load)
     subj_tbl     = subj_tbl(idx_resected,:);
 
     % look for neo-cortical and hippocampal channels
+    idx_neo = [];
+    idx_hip = [];
+    switch cfg.montage
+        case 'bipolar_two_directions'
+            idx_neo = ~cellfun(@isempty,regexpi(subj_tbl.chName,'Gr.*-Gr.*'));
 
-    idx_neo = ~cellfun(@isempty,regexpi(subj_tbl.chName,'Gr.*-Gr.*'));
+            idx_hip = ~cellfun(@isempty,regexpi(subj_tbl.chName,'(Str|Rst|Riv|St|StrB|Sst|S1-)[0]?(1|2|3)-(Str|Rst|Riv|St|StrB|Sst|S1-)[0]?(2|3|4)')) ;   
+    
+        case 'avg'
+            idx_neo = ~cellfun(@isempty,regexpi(subj_tbl.chName,'Gr.*'));
 
-    idx_hip = ~cellfun(@isempty,regexpi(subj_tbl.chName,'(Str|Rst|Riv|St|StrB|Sst|S1-)[0]?(1|2|3)-(Str|Rst|Riv|St|StrB|Sst|S1-)[0]?(2|3|4)')) ;   
+            idx_hip = ~cellfun(@isempty,regexpi(subj_tbl.chName,'(Str|Rst|Riv|St|StrB|Sst|S1-)[0]?(1|2|3)')) ;   
+    
+            
+    end
     
     neo_tbl = subj_tbl(idx_neo,:);
 

@@ -513,7 +513,7 @@ for i = 1 : numel(hitXtypeEPI)
     title(goi{i},'FontSize',14)
     a = gca;  
     a.FontSize = 14;
-        
+    ylim([0 30])    
 end
 f.PaperOrientation = 'landscape';
 set(f, 'Position', get(0, 'Screensize'));

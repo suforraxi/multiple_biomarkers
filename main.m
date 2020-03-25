@@ -22,9 +22,9 @@ path_settings;
 
 % biomarker names to compute
 %bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
-bioNames = {'PLV','PLI','H2'};
-bioNames = {'PAC'};
-bioNames = {'PAC_theta_HFA','PAC_theta_gamma'};
+%bioNames = {'PLV','PLI','H2'};
+%bioNames = {'PAC'};
+%bioNames = {'PAC_theta_HFA','PAC_theta_gamma'};
 bioNames = {'ARR','PAC','PLV','PLI','H2','GC','sdDTF'};
 
 % flag to decide if compute biomarkers or just plot the results in case the
@@ -55,14 +55,16 @@ outFolder        = fullfile('/home/matteo/Desktop/mb_reviewers/combined/combined
 %
 root_outFolder   = '/home/matteo/Desktop/mb_reviewers/';%'/home/matteo/Desktop/rep_analysis/';
 
-bi_boi   = {[1 4],[4 8],[8 13],[13 30]};
 
+montage = 'avg';
+%bi_boi   = {[1 4],[4 8],[8 13],[13 30]};
 
+bi_boi   = {[30 80]};
 
 % choose PAC only once;
 
-biomarker = repmat(bioNames,1,4);
-bi_boi    = repmat(bi_boi,1,3);
+biomarker = repmat(bioNames,1,1);
+bi_boi    = repmat(bi_boi,1,7);
 
 %biomarker = ['PAC' , biomarker];
 %bi_boi    = [[0 0],bi_boi];
@@ -73,7 +75,7 @@ N = numel(biomarker);
 if(compute_bio)
     parfor i = 1 : N
         
-        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,biomarker{i},bi_boi{i});
+        batch_compute_different_biomarkers(inDir_data,subj_info_F,outFolder,biomarker{i},bi_boi{i},montage);
         
     end    
 end
@@ -160,6 +162,9 @@ if(save_tbl_fig)
     % remove channels labeled with N-N (not present)
     cfg.removeNNchannels           = 1;
 
+    %montage
+    cfg.montage = montage;
+    
     % function to plot and save the figures
     compute_results_and_save_figure(cfg)
 end
