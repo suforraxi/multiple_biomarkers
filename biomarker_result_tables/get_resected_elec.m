@@ -1,19 +1,14 @@
-% function to obtain metadata regarding the recordings
-% if a channel contains any artefact during the recordings
+% Extract the resected electrodes from *_eletrodes.tsv file
+%
 % 
 % INPUT
 % dataDir  - root folder for raw data (data should be organized in BIDS)
 % fileName - filename for which to read the metadata (.vhdr) 
 %
 % OUTPUT
+% resected_el - cell array with the name of the resected channels
 %
-% artefact_T  - table with the following variables
-%               
-%               type    name of the artefact (we have just generic artefact called 'artefact')        
-%               start   sample time of the original data when the artefact starts        
-%               stop    sample time of the original data when the artefact ends
-%               channel channel name where the artefact was found
-
+%
 %     Copyright (C) 2020 Matteo Demuru
 % 
 %     This program is free software: you can redistribute it and/or modify
@@ -29,24 +24,24 @@
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-function [artefact_T] = get_metadata(dataDir,fileName)
-
+function resected_el = get_resected_elec(dataDir,fileName)
 
 [~,fileName,ext] = fileparts(fileName);
 subFolder        = split(fileName,'_'); 
 
-eventsFile        = fullfile(dataDir,...
+elecFile        = fullfile(dataDir,...
                      subFolder{1},...
                      subFolder{2},...
                      'ieeg',...
-                      strcat(fileName,'_events.tsv'));
+                      strcat(subFolder{1},'_',subFolder{2},'_ieeg_electrodes.tsv'));
 
 
-tsv_annots       = readtable(eventsFile, 'Delimiter', 'tab', 'FileType', 'text', 'ReadVariableNames', true);
+tsv_t            = readtable(elecFile, 'Delimiter', 'tab', 'FileType', 'text', 'ReadVariableNames', true);
+idx_resected     = strcmp(tsv_t.resected,'resected');
+%idx_edge         = strcmp(tsv_annots.type,'edge');
 
-idx_artefacts    = strcmp(tsv_annots.type,'artefact');
-if(~isempty(idx_artefacts))
-    artefact_T        = tsv_annots(idx_artefacts,:);
+if(~isempty(idx_resected))
+    resected_el      = tsv_t.name(idx_resected,1);
 else
-    artefact_T        = [];
+    resected_el      = [];
 end

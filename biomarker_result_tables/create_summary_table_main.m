@@ -230,8 +230,8 @@ description_sf_1y      = desc_sf_1y;
 description_sf_longest = desc_sf_longest;
 
 
-
-[ res_channel, artefact_T] = get_metadata(bidsFolder,sitName_F);
+resected_el   = get_resected_elec(dataDir,fileName);
+[ artefact_T] = get_metadata(bidsFolder,sitName_F);
 
 
 [idxArtefact ,idx_art_trial] = find_artefacts_epochs(outres.sampleinfo,outres.label,artefact_T);
@@ -252,7 +252,7 @@ biom_v = zeros(nCh,1);
 for i = 1 : numel(idxGch)  
     
     chName_v{i,1}   = outres.label{idxGch(i)};
-    resected_v{i,1} = get_resected_label(chName_v{i,1},res_channel,montage);
+    resected_v{i,1} = get_resected_label(chName_v{i,1},resected_el,montage);
     
     artefact_v(i,1) = idxArtefact(idxGch(i));
 

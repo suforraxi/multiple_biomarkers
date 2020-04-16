@@ -147,7 +147,7 @@ ntrial = numel(data.trial);
 
 
 [~,fName,~]                    = fileparts(cfg.datasetName);
-[ res_channel, artefact_T]     = get_metadata(cfg.inDir_data,fName);
+artefact_T                     = get_metadata(cfg.inDir_data,fName);
 [idxChArtefact ,idx_art_trial] = find_artefacts_epochs(data.sampleinfo,data.label,artefact_T);
 
 cfgCH.channel = data.label(~idxChArtefact);
