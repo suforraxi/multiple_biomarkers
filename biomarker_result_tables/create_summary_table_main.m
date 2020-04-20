@@ -230,7 +230,7 @@ description_sf_1y      = desc_sf_1y;
 description_sf_longest = desc_sf_longest;
 
 
-resected_el   = get_resected_elec(dataDir,fileName);
+resected_el   = get_resected_elec(bidsFolder,sitName_F);
 [ artefact_T] = get_metadata(bidsFolder,sitName_F);
 
 

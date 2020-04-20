@@ -35,28 +35,29 @@ save_tbl_fig = 1;
 % compute and save all the biomarkers
 
 % input folder where the raw data in BIDS is stored 
-inDir_data       = '/home/matteo/Desktop/tle_e/converted/';
+inDir_data       = '/home/matteo/Desktop/new_BIDS_import/converted/';
 
 
 
 % table with information related to subjects 
 % (see batch_compute_different biomakers help for a description of the table 
-subj_info_F       = '/home/matteo/Desktop/mb_reviewers/info/info.tsv';%'/home/matteo/Desktop/rep_analysis/info/info.tsv';
+subj_info_F       = '/home/matteo/Desktop/mb_newbids_res/info/info.tsv';%'/home/matteo/Desktop/rep_analysis/info/info.tsv';
 
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 %bandDir          = '13_30';
-outFolder        = fullfile('/home/matteo/Desktop/mb_reviewers/combined/combined_PAC/');%'/home/matteo/Desktop/rep_analysis/combined/';
+outFolder        = '/home/matteo/Desktop/mb_reviewers/combined/combined_newpool/';%'/home/matteo/Desktop/mb_reviewers/avg_montage/combined/';%'/
+%fullfile('/home/matteo/Desktop/mb_reviewers/combined/combined_PAC/');%'/home/matteo/Desktop/rep_analysis/combined/';
 
 
 
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %
-root_outFolder   = '/home/matteo/Desktop/mb_reviewers/';%'/home/matteo/Desktop/rep_analysis/';
+root_outFolder   = '/home/matteo/Desktop/mb_newbids_res/';%'/home/matteo/Desktop/rep_analysis/';
 
 
-montage = 'avg';
+montage = 'bipolar_two_directions';%'avg';
 %bi_boi   = {[1 4],[4 8],[8 13],[13 30]};
 
 bi_boi   = {[30 80]};
@@ -100,7 +101,7 @@ if(save_tbl_fig)
     % Result folder where the computed biomarkers are saved 
     cfg.rootInResFolder   = outFolder;
     % Folder where to save the summary tables
-    cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables','new_pool'); 
+    cfg.rootSummaryFolder = fullfile(root_outFolder ,'summary_tables'); 
 
     % out filename for the comparison of distributions pre and post pooling all
     % channel together

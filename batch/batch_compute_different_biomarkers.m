@@ -82,6 +82,8 @@
 %
 % bi_boi         - bivariate band of interest, an array representing the
 %                  filter settings where to filter [low high] (i.e. [30 80] for gamma band)
+%
+% montage        - reference montage could be ('avg' or 'bipolar_two_direction')
 
 %     Copyright (C) 2019 Matteo Demuru
 % 
