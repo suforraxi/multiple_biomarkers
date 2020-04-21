@@ -230,8 +230,8 @@ description_sf_1y      = desc_sf_1y;
 description_sf_longest = desc_sf_longest;
 
 
-resected_el   = get_resected_elec(bidsFolder,sitName_F);
-[ artefact_T] = get_metadata(bidsFolder,sitName_F);
+resected_el = get_resected_elec(bidsFolder,sitName_F);
+artefact_T  = get_metadata(bidsFolder,sitName_F);
 
 
 [idxArtefact ,idx_art_trial] = find_artefacts_epochs(outres.sampleinfo,outres.label,artefact_T);

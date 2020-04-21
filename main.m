@@ -35,29 +35,33 @@ save_tbl_fig = 1;
 % compute and save all the biomarkers
 
 % input folder where the raw data in BIDS is stored 
-inDir_data       = '/home/matteo/Desktop/new_BIDS_import/converted/';
+inDir_data       = '/home/matteo/Desktop/new_BIDS_import/converted_sec/';
 
 
 
 % table with information related to subjects 
 % (see batch_compute_different biomakers help for a description of the table 
-subj_info_F       = '/home/matteo/Desktop/mb_newbids_res/info/info.tsv';%'/home/matteo/Desktop/rep_analysis/info/info.tsv';
+subj_info_F       = '/home/matteo/Desktop/new_BIDS_import/multiple_biomarkers/info/info.tsv';%'/home/matteo/Desktop/rep_analysis/info/info.tsv';
 
 % output folder where the results from the computation of the biomarker is
 % stored (see batch_compute_different biomakers help for a description of the how the struct that is saved)
 %bandDir          = '13_30';
-outFolder        = '/home/matteo/Desktop/mb_reviewers/combined/combined_newpool/';%'/home/matteo/Desktop/mb_reviewers/avg_montage/combined/';%'/
-%fullfile('/home/matteo/Desktop/mb_reviewers/combined/combined_PAC/');%'/home/matteo/Desktop/rep_analysis/combined/';
+outFolder        = '/home/matteo/Desktop/mb_reviewers/avg_montage/combined/';
+%outFolder        = '/home/matteo/Desktop/mb_reviewers/combined/combined_newpool/';
+
+
 
 
 
 % output folder used to save biomarker summary tables (see create_summary_table.m for the layout of the table) 
 % and figures 
 %
-root_outFolder   = '/home/matteo/Desktop/mb_newbids_res/';%'/home/matteo/Desktop/rep_analysis/';
+root_outFolder   = '/home/matteo/Desktop/new_BIDS_import/multiple_biomarkers/average/';
+%root_outFolder   = '/home/matteo/Desktop/new_BIDS_import/multiple_biomarkers/bipolar/';
+%'/home/matteo/Desktop/rep_analysis/';
 
-
-montage = 'bipolar_two_directions';%'avg';
+montage = 'avg';
+%montage = 'bipolar_two_directions';%'avg';
 %bi_boi   = {[1 4],[4 8],[8 13],[13 30]};
 
 bi_boi   = {[30 80]};
